@@ -7,6 +7,10 @@ from flask import Flask, request, jsonify, render_template_string, send_from_dir
 from werkzeug.utils import secure_filename
 from werkzeug.middleware.proxy_fix import ProxyFix
 import sqlite3
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Import our custom modules
 from database import init_database, get_db_connection

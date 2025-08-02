@@ -18,9 +18,9 @@ class GeminiClient:
     
     def __init__(self):
         """Initialize the Gemini client with API key from environment."""
-        self.api_key = "AIzaSyDTxtS_0wEtBw3eD51PgAiQ2gPjbhtr4RQ"
+        self.api_key = os.getenv("GEMINI_API_KEY")
         if not self.api_key:
-            logging.warning("GEMINI_API_KEY not found in environment variables")
+            logging.warning("GEMINI_API_KEY not found in environment variables. Please set the environment variable.")
             self.model = None
         else:
             try:
@@ -64,7 +64,7 @@ class GeminiClient:
         Returns:
             Dictionary containing extracted information
         """
-        if not self.client:
+        if not self.model:
             return {"error": "Gemini client not available"}
         
         prompt = f"""
@@ -116,10 +116,10 @@ Only include information that is clearly stated in the document. Use null for mi
 """
         
         try:
-            response = self.client.models.generate_content(
-                model="gemini-2.5-pro",
-                contents=prompt,
-                config=types.GenerateContentConfig(
+            model_to_use = genai.GenerativeModel("gemini-1.5-pro")
+            response = model_to_use.generate_content(
+                prompt,
+                generation_config=genai.types.GenerationConfig(
                     response_mime_type="application/json"
                 )
             )
@@ -380,10 +380,10 @@ Only include information that is clearly stated. Use null for missing informatio
 """
         
         try:
-            response = self.client.models.generate_content(
-                model="gemini-2.5-pro",
-                contents=prompt,
-                config=types.GenerateContentConfig(
+            model_to_use = genai.GenerativeModel("gemini-1.5-pro")
+            response = model_to_use.generate_content(
+                prompt,
+                generation_config=genai.types.GenerationConfig(
                     response_mime_type="application/json"
                 )
             )
