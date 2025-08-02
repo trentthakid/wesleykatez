@@ -272,7 +272,7 @@ def get_lead_scores_tool() -> str:
         logging.error(f"Error in get_lead_scores_tool: {str(e)}")
         return "Error calculating lead scores."
 
-def get_market_insights(area: str = None) -> Dict[str, Any]:
+def get_market_insights(area: str = "") -> Dict[str, Any]:
     """
     Get market insights for a specific area or overall market.
     """

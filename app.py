@@ -255,7 +255,7 @@ def get_market_analysis(query):
                 area = word
                 break
         
-        insights = get_market_insights(area)
+        insights = get_market_insights(area or "")
         
         if 'error' in insights:
             return "Sorry, I couldn't retrieve market insights at this time."
@@ -442,7 +442,7 @@ def upload_files():
             if file.filename == '':
                 continue
                 
-            if file and allowed_file(file.filename):
+            if file and file.filename and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
                 filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 file.save(filepath)
@@ -490,7 +490,7 @@ def get_market_analytics():
     """Get market insights"""
     try:
         area = request.args.get('area')
-        insights = get_market_insights(area)
+        insights = get_market_insights(area or "")
         return jsonify(insights)
     except Exception as e:
         logging.error(f"Market analytics error: {str(e)}")
@@ -640,6 +640,46 @@ def get_overdue_tasks_api():
     except Exception as e:
         logging.error(f"Overdue tasks error: {str(e)}")
         return jsonify({'success': False, 'error': 'Failed to get overdue tasks'}), 500
+
+@app.route('/api/dashboard/stats', methods=['GET'])
+def get_dashboard_stats():
+    """Get dashboard statistics"""
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        # Active properties
+        cursor.execute("SELECT COUNT(*) FROM Properties WHERE status = 'Available'")
+        active_properties = cursor.fetchone()[0]
+        
+        # Active deals  
+        cursor.execute("SELECT COUNT(*) FROM Deals WHERE status = 'Active'")
+        active_deals = cursor.fetchone()[0]
+        
+        # Revenue last 30 days
+        thirty_days_ago = (datetime.now() - timedelta(days=30)).isoformat()
+        cursor.execute("SELECT COALESCE(SUM(commission_amount), 0) FROM Deals WHERE status = 'Closed' AND closed_date >= ?", (thirty_days_ago,))
+        revenue_30_days = cursor.fetchone()[0]
+        
+        # Pipeline value (active deals)
+        cursor.execute("SELECT COALESCE(SUM(deal_value), 0) FROM Deals WHERE status = 'Active'")
+        pipeline_value = cursor.fetchone()[0]
+        
+        conn.close()
+        
+        return jsonify({
+            'success': True,
+            'stats': {
+                'active_properties': active_properties,
+                'active_deals': active_deals,
+                'revenue_30_days': revenue_30_days,
+                'pipeline_value': pipeline_value
+            }
+        })
+        
+    except Exception as e:
+        logging.error(f"Dashboard stats error: {str(e)}")
+        return jsonify({'success': False, 'error': 'Failed to get dashboard stats'}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

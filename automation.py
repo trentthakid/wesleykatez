@@ -244,11 +244,11 @@ def draft_follow_up_email(contact_id: int, template_type: str = 'follow_up_hot')
         )
         
         return {
-            'to_email': contact[1],
-            'to_name': contact[0],
-            'subject': personalized_subject,
-            'body': personalized_body,
-            'contact_id': contact_id
+            'to_email': str(contact[1]),
+            'to_name': str(contact[0]),
+            'subject': str(personalized_subject),
+            'body': str(personalized_body),
+            'contact_id': str(contact_id)
         }
         
     except Exception as e:
