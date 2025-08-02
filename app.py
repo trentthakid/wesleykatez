@@ -399,24 +399,32 @@ def get_daily_briefing_summary():
         return "Sorry, I couldn't generate your daily briefing."
 
 def llm_tool(query, conversation_history):
-    """Handle complex queries using Gemini LLM"""
+    """Handle complex queries using Gemini LLM, augmented with a rich knowledge base."""
     try:
-        # Get relevant context from database
-        context = get_database_context()
-        
-        # Get relevant context from knowledge base
+        # Get relevant context from all knowledge sources
         knowledge_context = get_relevant_context(query)
         
         # Create a comprehensive prompt
         prompt = f"""
-You are AURA, a friendly and helpful AI assistant for a Dubai real estate professional.
+You are AURA, an expert AI assistant manager for Wesley Kateguru, a top real estate agent specializing in Palm Jumeirah, Dubai.
+Your goal is to provide accurate, fast, and insightful answers to help him save time and serve his clients better.
+You must use the provided context to inform your response.
 
-CONVERSATION HISTORY:
-{conversation_history}
+**CONVERSATION HISTORY:**
+{json.dumps(conversation_history, indent=2)}
 
-User Query: {query}
+**RELEVANT CONTEXT FROM KNOWLEDGE BASE:**
+{knowledge_context}
 
-Based on the conversation history and the user's query, provide a concise and friendly response. If you need more information, ask for it in a clear and polite way.
+**USER QUERY:**
+"{query}"
+
+**TASK:**
+Based on the conversation history and the rich context provided, formulate the best possible response to the user's query.
+- If the context provides a direct answer, use it.
+- If the context provides related information, use it to form a more insightful and comprehensive answer.
+- If the context does not contain the answer, state that you don't have that information in your knowledge base but you can perform a general search.
+- Always maintain the persona of a hyper-efficient, expert assistant.
 """
         
         response = gemini_client.generate_response(prompt)

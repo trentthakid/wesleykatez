@@ -16,7 +16,8 @@ from database import get_db_connection
 PALM_JUMEIRAH_DATA = {
     "trunk_buildings": [],
     "crescent_developments": [],
-    "restaurants": []
+    "restaurants": [],
+    "scraped_listings": []
 }
 
 def load_palm_jumeirah_knowledge():
@@ -26,7 +27,8 @@ def load_palm_jumeirah_knowledge():
     files_to_load = {
         "trunk_buildings": "palm_jumeirah_trunk_buildings.json",
         "crescent_developments": "palm_jumeirah_crescent_developments.json",
-        "restaurants": "palm_jumeirah_restaurants.json"
+        "restaurants": "palm_jumeirah_restaurants.json",
+        "scraped_listings": "scraped_property_listings.json"
     }
 
     for key, filename in files_to_load.items():
@@ -424,7 +426,18 @@ def get_relevant_context(query: str) -> str:
     if palm_context:
         context_parts.append("Structured Palm Jumeirah Knowledge:\n" + "\n".join(palm_context))
 
-    # 2. Search document-based knowledge base (existing functionality)
+    # 2. Search scraped property listings
+    scraped_context = []
+    for listing in PALM_JUMEIRAH_DATA.get("scraped_listings", []):
+        if listing.get('title') and query_lower in listing['title'].lower():
+            price = listing.get('price', {}).get('value', 'N/A')
+            currency = listing.get('price', {}).get('currency', '')
+            scraped_context.append(f"- Scraped Listing: {listing['title']} for {price} {currency}")
+
+    if scraped_context:
+        context_parts.append("Live Market Listings (from Scraper):\n" + "\n".join(scraped_context))
+
+    # 3. Search document-based knowledge base (existing functionality)
     try:
         relevant_items = search_knowledge_base(query, limit=2)
         if relevant_items:
