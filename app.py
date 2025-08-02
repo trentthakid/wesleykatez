@@ -1,6 +1,7 @@
 import os
 import logging
 import json
+import re
 from datetime import datetime, timedelta
 from flask import Flask, request, jsonify, render_template_string, send_from_directory
 from werkzeug.utils import secure_filename
@@ -52,45 +53,70 @@ def chat():
     try:
         data = request.get_json()
         message = data.get('message', '').strip()
+        conversation_history = data.get('conversation_history', [])
         
         if not message:
             return jsonify({'error': 'Message is required'}), 400
         
         # Route the command through our two-tier system
-        response = route_command(message)
+        response = route_command(message, conversation_history)
         
-        return jsonify({'message': response})
+        conversation_history.append({'role': 'user', 'content': message})
+        conversation_history.append({'role': 'assistant', 'content': response})
+        
+        # Store the conversation history in the database
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        session_id = request.headers.get("session-id", "default-session")
+        cursor.execute("""
+            INSERT INTO ConversationHistory (session_id, role, content, created_date)
+            VALUES (?, ?, ?, ?)
+        """, (session_id, "user", message, datetime.now().isoformat()))
+        cursor.execute("""
+            INSERT INTO ConversationHistory (session_id, role, content, created_date)
+            VALUES (?, ?, ?, ?)
+        """, (session_id, "assistant", response, datetime.now().isoformat()))
+        conn.commit()
+        conn.close()
+        
+        return jsonify({'message': response, 'conversation_history': conversation_history})
         
     except Exception as e:
         logging.error(f"Chat error: {str(e)}")
         return jsonify({'error': 'Failed to process message'}), 500
 
-def route_command(user_input):
+def route_command(user_input, conversation_history):
     """Two-tier cognitive engine: Tool-based routing + LLM escalation"""
-    user_input_lower = user_input.lower()
     
-    # Tier 1: Tool-based routing for specific commands
-    if 'who owns' in user_input_lower or 'owner of' in user_input_lower:
+    # Get intent from Gemini
+    intent_data = gemini_client.get_intent(conversation_history)
+    intent = intent_data.get("intent")
+    entities = intent_data.get("entities", {})
+    
+    # Route to the appropriate function based on intent
+    if intent == "find_owner":
         return find_owner(user_input)
-    elif 'create task' in user_input_lower or 'add task' in user_input_lower:
-        return create_task(user_input)
-    elif 'follow up' in user_input_lower or 'follow-up' in user_input_lower:
+    elif intent == "create_contact":
+        return create_contact(user_input)
+    elif intent == "create_task":
+        return create_task(entities.get("task_description", user_input), entities.get("due_date"))
+    elif intent == "get_follow_ups":
         return get_follow_ups()
-    elif 'lead score' in user_input_lower or 'score leads' in user_input_lower:
+    elif intent == "score_leads":
         return get_lead_scores_tool()
-    elif 'find buyers' in user_input_lower or 'matching buyers' in user_input_lower:
+    elif intent == "find_buyers":
         return find_buyers_for_property(user_input)
-    elif 'property' in user_input_lower and ('find' in user_input_lower or 'search' in user_input_lower):
+    elif intent == "search_properties":
         return search_properties(user_input)
-    elif 'market' in user_input_lower and ('insight' in user_input_lower or 'analysis' in user_input_lower):
+    elif intent == "get_market_analysis":
         return get_market_analysis(user_input)
-    elif 'performance' in user_input_lower or 'metrics' in user_input_lower:
+    elif intent == "get_performance_summary":
         return get_performance_summary()
-    elif 'daily briefing' in user_input_lower or 'briefing' in user_input_lower:
+    elif intent == "get_daily_briefing":
         return get_daily_briefing_summary()
-    
-    # Tier 2: LLM escalation for complex queries
-    return llm_tool(user_input)
+    else:
+        # Fallback to the LLM tool if the intent is unknown
+        return llm_tool(user_input, conversation_history)
 
 def find_owner(query):
     """Find the owner of a specific property"""
@@ -127,7 +153,41 @@ def find_owner(query):
         logging.error(f"Error finding owner: {str(e)}")
         return "Sorry, I encountered an error while searching for ownership information."
 
-def create_task(query):
+def create_contact(query):
+    """Create a contact from natural language input"""
+    try:
+        # Extract contact details using basic parsing
+        name_match = re.search(r"name\s+is\s+([a-zA-Z\s]+)", query)
+        email_match = re.search(r"email\s+is\s+([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})", query)
+        phone_match = re.search(r"phone\s+is\s+([+\d\s-]+)", query)
+        lead_status_match = re.search(r"lead\s+status\s+is\s+([a-zA-Z]+)", query)
+
+        name = name_match.group(1).strip() if name_match else None
+        email = email_match.group(1).strip() if email_match else None
+        phone = phone_match.group(1).strip() if phone_match else None
+        lead_status = lead_status_match.group(1).strip() if lead_status_match else "Cold"
+
+        if not name:
+            return "Please provide a name for the contact."
+
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        cursor.execute("""
+            INSERT INTO Contacts (name, email, phone, lead_status, source, created_date)
+            VALUES (?, ?, ?, ?, ?, ?)
+        """, (name, email, phone, lead_status, "AI Assistant", datetime.now().isoformat()))
+        
+        conn.commit()
+        conn.close()
+        
+        return f"Contact '{name}' created successfully."
+        
+    except Exception as e:
+        logging.error(f"Error creating contact: {str(e)}")
+        return "Sorry, I couldn't create the contact. Please try again."
+
+def create_task(query, due_date=None):
     """Create a task from natural language input"""
     try:
         # Extract task details using basic parsing
@@ -146,7 +206,7 @@ def create_task(query):
             task_description[:100],  # Use first 100 chars as title
             task_description,
             datetime.now().isoformat(),
-            (datetime.now() + timedelta(days=7)).isoformat()  # Default due date 7 days from now
+            due_date if due_date else (datetime.now() + timedelta(days=7)).isoformat()  # Default due date 7 days from now
         ))
         
         conn.commit()
@@ -334,7 +394,7 @@ def get_daily_briefing_summary():
         logging.error(f"Error getting daily briefing: {str(e)}")
         return "Sorry, I couldn't generate your daily briefing."
 
-def llm_tool(query):
+def llm_tool(query, conversation_history):
     """Handle complex queries using Gemini LLM"""
     try:
         # Get relevant context from database
@@ -345,19 +405,14 @@ def llm_tool(query):
         
         # Create a comprehensive prompt
         prompt = f"""
-You are AURA, an AI assistant for a Dubai real estate professional. You have access to the following data context:
+You are AURA, a friendly and helpful AI assistant for a Dubai real estate professional.
 
-DATABASE CONTEXT:
-{context}
-
-KNOWLEDGE BASE CONTEXT:
-{knowledge_context}
+CONVERSATION HISTORY:
+{conversation_history}
 
 User Query: {query}
 
-Please provide a helpful, accurate, and professional response. Use the context provided to give specific, actionable advice. If you need specific data that isn't in the context, suggest what the user should provide or how they can get that information.
-
-Keep responses concise but comprehensive, and always maintain a professional tone suitable for a real estate expert.
+Based on the conversation history and the user's query, provide a concise and friendly response. If you need more information, ask for it in a clear and polite way.
 """
         
         response = gemini_client.generate_response(prompt)
@@ -419,9 +474,22 @@ def daily_briefing():
     try:
         follow_ups = get_follow_up_tasks()
         
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        
+        today = datetime.now().strftime("%Y-%m-%d")
+        cursor.execute("SELECT * FROM Tasks WHERE due_date LIKE ?", (f"{today}%",))
+        
+        todays_tasks = []
+        for row in cursor.fetchall():
+            todays_tasks.append(dict(row))
+            
+        conn.close()
+        
         return jsonify({
             'success': True,
-            'follow_ups': follow_ups[:5]  # Limit to 5 most urgent
+            'follow_ups': follow_ups[:5],  # Limit to 5 most urgent
+            'todays_tasks': todays_tasks
         })
         
     except Exception as e:
@@ -658,7 +726,7 @@ def get_dashboard_stats():
         
         # Revenue last 30 days (using deal_value as fallback)
         thirty_days_ago = (datetime.now() - timedelta(days=30)).isoformat()
-        cursor.execute("SELECT COALESCE(SUM(deal_value * 0.03), 0) FROM Deals WHERE status = 'Closed' AND closed_date >= ?", (thirty_days_ago,))
+        cursor.execute("SELECT COALESCE(SUM(deal_value * 0.03), 0) FROM Deals WHERE status = 'Closed' AND closing_date >= ?", (thirty_days_ago,))
         revenue_30_days = cursor.fetchone()[0]
         
         # Pipeline value (active deals)

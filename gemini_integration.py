@@ -7,8 +7,8 @@ import os
 import logging
 import json
 from typing import Dict, Any, Optional, List
-from google import genai
-from google.genai import types
+import google.generativeai as genai
+from google.generativeai import types
 
 class GeminiClient:
     """
@@ -18,37 +18,35 @@ class GeminiClient:
     
     def __init__(self):
         """Initialize the Gemini client with API key from environment."""
-        self.api_key = os.getenv("GEMINI_API_KEY")
+        self.api_key = "AIzaSyDTxtS_0wEtBw3eD51PgAiQ2gPjbhtr4RQ"
         if not self.api_key:
             logging.warning("GEMINI_API_KEY not found in environment variables")
-            self.client = None
+            self.model = None
         else:
             try:
-                self.client = genai.Client(api_key=self.api_key)
+                genai.configure(api_key=self.api_key)
+                self.model = genai.GenerativeModel("gemini-1.5-flash")
                 logging.info("Gemini client initialized successfully")
             except Exception as e:
                 logging.error(f"Failed to initialize Gemini client: {str(e)}")
-                self.client = None
+                self.model = None
     
-    def generate_response(self, prompt: str, model: str = "gemini-2.5-flash") -> str:
+    def generate_response(self, prompt: str, model: str = "gemini-1.5-flash") -> str:
         """
         Generate a response using Gemini model.
         
         Args:
             prompt: The input prompt for the model
-            model: The Gemini model to use (default: gemini-2.5-flash)
+            model: The Gemini model to use (default: gemini-1.5-flash)
             
         Returns:
             Generated response text
         """
-        if not self.client:
+        if not self.model:
             return "I'm sorry, but I'm currently unable to process your request. Please check that the Gemini API key is properly configured."
         
         try:
-            response = self.client.models.generate_content(
-                model=model,
-                contents=prompt
-            )
+            response = self.model.generate_content(prompt)
             
             return response.text if response.text else "I couldn't generate a response for that query."
             
@@ -399,6 +397,45 @@ Only include information that is clearly stated. Use null for missing informatio
             logging.error(f"Error extracting client preferences: {str(e)}")
             return {}
     
+    def get_intent(self, conversation_history: List[Dict[str, str]]) -> Dict[str, Any]:
+        """
+        Determine the user's intent from the conversation history.
+        """
+        prompt = f"""
+You are a real estate AI assistant. Your task is to determine the user's intent from the following conversation history.
+
+Conversation History:
+{json.dumps(conversation_history, indent=2)}
+
+Please identify the user's intent and extract any relevant entities. The possible intents are: "find_owner", "create_task", "create_contact", "get_follow_ups", "score_leads", "find_buyers", "search_properties", "get_market_analysis", "get_performance_summary", "get_daily_briefing", "unknown".
+
+Return the intent and any extracted entities in JSON format. For example:
+{{
+    "intent": "create_contact",
+    "entities": {{
+        "task_description": "call Ahmed Al Rashid tomorrow at 9am"
+    }}
+}}
+"""
+        
+        try:
+            response = self.model.generate_content(
+                prompt,
+                generation_config=genai.types.GenerationConfig()
+            )
+            
+            if response.text:
+                return json.loads(response.text)
+            else:
+                return {"intent": "unknown", "entities": {}}
+                
+        except json.JSONDecodeError:
+            logging.error("Failed to parse JSON response from Gemini")
+            return {"intent": "unknown", "entities": {}}
+        except Exception as e:
+            logging.error(f"Error getting intent with Gemini: {str(e)}")
+            return {"intent": "unknown", "entities": {}}
+
     def is_available(self) -> bool:
         """
         Check if the Gemini client is available and working.
@@ -406,4 +443,4 @@ Only include information that is clearly stated. Use null for missing informatio
         Returns:
             True if client is available, False otherwise
         """
-        return self.client is not None
+        return self.model is not None

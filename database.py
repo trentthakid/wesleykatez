@@ -203,6 +203,17 @@ def init_database():
         )
     ''')
     
+    # Conversation history table
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS ConversationHistory (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            session_id TEXT NOT NULL,
+            role TEXT NOT NULL,
+            content TEXT NOT NULL,
+            created_date TEXT
+        )
+    ''')
+    
     conn.commit()
     
     # Insert sample data if tables are empty

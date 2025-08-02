@@ -3,6 +3,7 @@ Knowledge base module for the Digital Twin real estate application.
 Handles document processing, entity recognition, and information retrieval.
 """
 
+import csv
 import logging
 import os
 import json
@@ -116,6 +117,11 @@ def add_to_knowledge_base(file_path: str, filename: str) -> bool:
     Process an uploaded file and add its content to the knowledge base.
     """
     try:
+        file_extension = filename.lower().split('.')[-1]
+
+        if file_extension == 'csv':
+            return add_contacts_from_csv(file_path, filename)
+
         # Extract content based on file type
         content = extract_content_from_file(file_path, filename)
         
@@ -124,7 +130,6 @@ def add_to_knowledge_base(file_path: str, filename: str) -> bool:
             return False
         
         # Determine content type
-        file_extension = filename.lower().split('.')[-1]
         content_type = get_content_type(file_extension)
         
         # Extract metadata
@@ -420,6 +425,39 @@ def update_knowledge_item_tags(item_id: int, tags: List[str]) -> bool:
         
     except Exception as e:
         logging.error(f"Error updating knowledge item tags: {str(e)}")
+        return False
+
+def add_contacts_from_csv(file_path: str, filename: str) -> bool:
+    """
+    Process a CSV file and add its content to the Contacts table.
+    """
+    try:
+        with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+            reader = csv.reader(f)
+            header = next(reader)  # Read header row
+            
+            # Check if the header matches the expected format for contacts
+            if header != ['name', 'email', 'phone', 'lead_status']:
+                logging.info(f"{filename} is not a contacts CSV file. Adding to knowledge base instead.")
+                return False
+
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            
+            for row in reader:
+                cursor.execute("""
+                    INSERT INTO Contacts (name, email, phone, lead_status, source, created_date)
+                    VALUES (?, ?, ?, ?, ?, ?)
+                """, (row[0], row[1], row[2], row[3], filename, datetime.now().isoformat()))
+            
+            conn.commit()
+            conn.close()
+            
+            logging.info(f"Successfully added contacts from {filename}")
+            return True
+            
+    except Exception as e:
+        logging.error(f"Error adding contacts from {filename}: {str(e)}")
         return False
 
 def get_knowledge_statistics() -> Dict[str, Any]:
