@@ -640,12 +640,14 @@
                     activeTab.value = tabId;
                     
                     // Load data when switching tabs
-                    if (tabId === 'properties' && !properties.value.loaded) {
+                    if (tabId === 'properties') {
                         loadProperties();
-                    } else if (tabId === 'contacts' && !contacts.value.loaded) {
+                    } else if (tabId === 'contacts') {
                         loadContacts();
-                    } else if (tabId === 'analytics' && !leadScores.value.loaded) {
+                    } else if (tabId === 'analytics') {
                         loadAnalytics();
+                    } else if (tabId === 'data-hub') {
+                        loadKnowledgeStats();
                     }
                 };
 
@@ -767,11 +769,19 @@
                 const loadDashboardData = async () => {
                     try {
                         // Load dashboard stats
+                        const dashboardResponse = await fetch('/api/dashboard/stats');
+                        if (dashboardResponse.ok) {
+                            const dashboardData = await dashboardResponse.json();
+                            if (dashboardData.success) {
+                                dashboardStats.value = dashboardData.stats;
+                            }
+                        }
+
+                        // Load performance metrics
                         const metricsResponse = await fetch('/api/analytics/performance');
                         if (metricsResponse.ok) {
                             const metricsData = await metricsResponse.json();
                             performanceMetrics.value = metricsData;
-                            dashboardStats.value = metricsData;
                         }
 
                         // Load daily briefing
@@ -797,8 +807,6 @@
                                 total_properties: propsData.properties?.length || 0,
                                 total_contacts: contactsData.contacts?.length || 0
                             };
-                            
-                            dashboardStats.value.active_properties = propsData.properties?.filter(p => p.status === 'Available').length || 0;
                         }
                     } catch (error) {
                         console.error('Error loading dashboard data:', error);
@@ -864,14 +872,24 @@
 
                 const loadKnowledgeStats = async () => {
                     try {
-                        // This endpoint doesn't exist in the backend yet, so we'll simulate it
+                        const response = await fetch('/api/knowledge/stats');
+                        if (response.ok) {
+                            const data = await response.json();
+                            knowledgeStats.value = data;
+                        } else {
+                            knowledgeStats.value = {
+                                total_items: 0,
+                                content_types: {},
+                                recent_additions: 0
+                            };
+                        }
+                    } catch (error) {
+                        console.error('Error loading knowledge stats:', error);
                         knowledgeStats.value = {
                             total_items: 0,
                             content_types: {},
                             recent_additions: 0
                         };
-                    } catch (error) {
-                        console.error('Error loading knowledge stats:', error);
                     }
                 };
 
@@ -934,6 +952,11 @@
                     // Load initial dashboard data
                     loadDashboardData();
                     loadKnowledgeStats();
+                    
+                    // Pre-load properties and contacts for instant access
+                    loadProperties();
+                    loadContacts();
+                    loadAnalytics();
                 });
 
                 return {
