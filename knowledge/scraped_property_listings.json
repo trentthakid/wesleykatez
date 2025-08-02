@@ -1,0 +1,777 @@
+[
+    {
+        "title": "Chiller Free l 3bhk + Maid l Vacant",
+        "location": {
+            "id": "12598",
+            "full_name": "5242 Tower 2, 5242, Dubai Marina, Dubai",
+            "coordinates": {
+                "lat": 25.080541610717773,
+                "lon": 55.140342712402344
+            },
+            "slug": "dubai-marina-5242-5242-tower-2",
+            "path": "1.50.8317.12598",
+            "type": "TOWER",
+            "name": "5242 Tower 2",
+            "path_name": "Dubai, Dubai Marina, 5242"
+        },
+        "price": {
+            "value": 310000,
+            "currency": "AED",
+            "period": "yearly",
+            "is_hidden": false
+        },
+        "bedrooms": "3",
+        "bathrooms": "3",
+        "size_sqft": {
+            "value": 1800,
+            "unit": "sqft"
+        },
+        "property_type": null,
+        "url": null,
+        "scraped_date": "2025-08-02T14:45:57.693317"
+    },
+    {
+        "title": "Opulently furnished | High Floor | Available ",
+        "location": {
+            "id": "9086",
+            "full_name": "Jumeirah Living Marina Gate, Marina Gate, Dubai Marina, Dubai",
+            "coordinates": {
+                "lat": 25.087146759033203,
+                "lon": 55.14668273925781
+            },
+            "slug": "dubai-marina-marina-gate-jumeirah-living-marina-gate",
+            "path": "1.50.733.9086",
+            "type": "TOWER",
+            "name": "Jumeirah Living Marina Gate",
+            "path_name": "Dubai, Dubai Marina, Marina Gate"
+        },
+        "price": {
+            "value": 310000,
+            "currency": "AED",
+            "period": "yearly",
+            "is_hidden": false
+        },
+        "bedrooms": "2",
+        "bathrooms": "3",
+        "size_sqft": {
+            "value": 1423,
+            "unit": "sqft"
+        },
+        "property_type": null,
+        "url": null,
+        "scraped_date": "2025-08-02T14:45:57.693332"
+    },
+    {
+        "title": "Fully Furnished | High Floor | Ready to Move",
+        "location": {
+            "id": "3154",
+            "full_name": "Shemara Tower, Marina Promenade, Dubai Marina, Dubai",
+            "coordinates": {
+                "lat": 25.07430648803711,
+                "lon": 55.132694244384766
+            },
+            "slug": "dubai-marina-marina-promenade-shemara-tower",
+            "path": "1.50.721.3154",
+            "type": "TOWER",
+            "name": "Shemara Tower",
+            "path_name": "Dubai, Dubai Marina, Marina Promenade"
+        },
+        "price": {
+            "value": 129999,
+            "currency": "AED",
+            "period": "yearly",
+            "is_hidden": false
+        },
+        "bedrooms": "1",
+        "bathrooms": "1",
+        "size_sqft": {
+            "value": 895,
+            "unit": "sqft"
+        },
+        "property_type": null,
+        "url": null,
+        "scraped_date": "2025-08-02T14:45:57.693336"
+    },
+    {
+        "title": "Marina View | Vacant | Spacious",
+        "location": {
+            "id": "3091",
+            "full_name": "The Point, Dubai Marina, Dubai",
+            "coordinates": {
+                "lat": 25.073156356811523,
+                "lon": 55.13279724121094
+            },
+            "slug": "dubai-marina-the-point",
+            "path": "1.50.3091",
+            "type": "TOWER",
+            "name": "The Point",
+            "path_name": "Dubai, Dubai Marina"
+        },
+        "price": {
+            "value": 90000,
+            "currency": "AED",
+            "period": "yearly",
+            "is_hidden": false
+        },
+        "bedrooms": "1",
+        "bathrooms": "2",
+        "size_sqft": {
+            "value": 1,
+            "unit": "sqft"
+        },
+        "property_type": null,
+        "url": null,
+        "scraped_date": "2025-08-02T14:45:57.693339"
+    },
+    {
+        "title": "2BR | FULLY FURNISHED | COZY UNIT | MARINA VIEW",
+        "location": {
+            "id": "3111",
+            "full_name": "Orra Marina, Dubai Marina, Dubai",
+            "coordinates": {
+                "lat": 25.07060432434082,
+                "lon": 55.13322830200195
+            },
+            "slug": "dubai-marina-orra-marina",
+            "path": "1.50.3111",
+            "type": "TOWER",
+            "name": "Orra Marina",
+            "path_name": "Dubai, Dubai Marina"
+        },
+        "price": {
+            "value": 150000,
+            "currency": "AED",
+            "period": "yearly",
+            "is_hidden": false
+        },
+        "bedrooms": "2",
+        "bathrooms": "2",
+        "size_sqft": {
+            "value": 1350,
+            "unit": "sqft"
+        },
+        "property_type": null,
+        "url": null,
+        "scraped_date": "2025-08-02T14:45:57.693342"
+    },
+    {
+        "title": "Unfurnished | Near Metro | Prime Location",
+        "location": {
+            "id": "3027",
+            "full_name": "Escan Tower, Dubai Marina, Dubai",
+            "coordinates": {
+                "lat": 25.06807518005371,
+                "lon": 55.13262939453125
+            },
+            "slug": "dubai-marina-escan-tower",
+            "path": "1.50.3027",
+            "type": "TOWER",
+            "name": "Escan Tower",
+            "path_name": "Dubai, Dubai Marina"
+        },
+        "price": {
+            "value": 70000,
+            "currency": "AED",
+            "period": "yearly",
+            "is_hidden": false
+        },
+        "bedrooms": "1",
+        "bathrooms": "1",
+        "size_sqft": {
+            "value": 755,
+            "unit": "sqft"
+        },
+        "property_type": null,
+        "url": null,
+        "scraped_date": "2025-08-02T14:45:57.693344"
+    },
+    {
+        "title": "FOR RENT | MARINA VIEW | FULLY FURNISHED 1 BEDROOM",
+        "location": {
+            "id": "3089",
+            "full_name": "The Belvedere, Dubai Marina, Dubai",
+            "coordinates": {
+                "lat": 25.06808853149414,
+                "lon": 55.13067626953125
+            },
+            "slug": "dubai-marina-the-belvedere",
+            "path": "1.50.3089",
+            "type": "TOWER",
+            "name": "The Belvedere",
+            "path_name": "Dubai, Dubai Marina"
+        },
+        "price": {
+            "value": 79999,
+            "currency": "AED",
+            "period": "yearly",
+            "is_hidden": false
+        },
+        "bedrooms": "1",
+        "bathrooms": "2",
+        "size_sqft": {
+            "value": 1012,
+            "unit": "sqft"
+        },
+        "property_type": null,
+        "url": null,
+        "scraped_date": "2025-08-02T14:45:57.693346"
+    },
+    {
+        "title": "Sea View | Well Maintained | Furnished",
+        "location": {
+            "id": "3045",
+            "full_name": "Elite Residence, Dubai Marina, Dubai",
+            "coordinates": {
+                "lat": 25.089393615722656,
+                "lon": 55.147796630859375
+            },
+            "slug": "dubai-marina-elite-residence",
+            "path": "1.50.3045",
+            "type": "TOWER",
+            "name": "Elite Residence",
+            "path_name": "Dubai, Dubai Marina"
+        },
+        "price": {
+            "value": 140000,
+            "currency": "AED",
+            "period": "yearly",
+            "is_hidden": false
+        },
+        "bedrooms": "2",
+        "bathrooms": "2",
+        "size_sqft": {
+            "value": 1329,
+            "unit": "sqft"
+        },
+        "property_type": null,
+        "url": null,
+        "scraped_date": "2025-08-02T14:45:57.693349"
+    },
+    {
+        "title": "FULL SEA VIEW | BLUEWATERS VIEW | MULTIPLE CHEQUES",
+        "location": {
+            "id": "12597",
+            "full_name": "5242 Tower 1, 5242, Dubai Marina, Dubai",
+            "coordinates": {
+                "lat": 25.080541610717773,
+                "lon": 55.140342712402344
+            },
+            "slug": "dubai-marina-5242-5242-tower-1",
+            "path": "1.50.8317.12597",
+            "type": "TOWER",
+            "name": "5242 Tower 1",
+            "path_name": "Dubai, Dubai Marina, 5242"
+        },
+        "price": {
+            "value": 220000,
+            "currency": "AED",
+            "period": "yearly",
+            "is_hidden": false
+        },
+        "bedrooms": "2",
+        "bathrooms": "3",
+        "size_sqft": {
+            "value": 1134,
+            "unit": "sqft"
+        },
+        "property_type": null,
+        "url": null,
+        "scraped_date": "2025-08-02T14:45:57.693351"
+    },
+    {
+        "title": "BEACH | TRAM | VACANT",
+        "location": {
+            "id": "3091",
+            "full_name": "The Point, Dubai Marina, Dubai",
+            "coordinates": {
+                "lat": 25.073156356811523,
+                "lon": 55.13279724121094
+            },
+            "slug": "dubai-marina-the-point",
+            "path": "1.50.3091",
+            "type": "TOWER",
+            "name": "The Point",
+            "path_name": "Dubai, Dubai Marina"
+        },
+        "price": {
+            "value": 120000,
+            "currency": "AED",
+            "period": "yearly",
+            "is_hidden": false
+        },
+        "bedrooms": "1",
+        "bathrooms": "2",
+        "size_sqft": {
+            "value": 798,
+            "unit": "sqft"
+        },
+        "property_type": null,
+        "url": null,
+        "scraped_date": "2025-08-02T14:45:57.693353"
+    },
+    {
+        "title": "Fully Furnished | Ample Layout | Partial Sea View",
+        "location": {
+            "id": "3045",
+            "full_name": "Elite Residence, Dubai Marina, Dubai",
+            "coordinates": {
+                "lat": 25.089393615722656,
+                "lon": 55.147796630859375
+            },
+            "slug": "dubai-marina-elite-residence",
+            "path": "1.50.3045",
+            "type": "TOWER",
+            "name": "Elite Residence",
+            "path_name": "Dubai, Dubai Marina"
+        },
+        "price": {
+            "value": 135000,
+            "currency": "AED",
+            "period": "yearly",
+            "is_hidden": false
+        },
+        "bedrooms": "2",
+        "bathrooms": "3",
+        "size_sqft": {
+            "value": 1329,
+            "unit": "sqft"
+        },
+        "property_type": null,
+        "url": null,
+        "scraped_date": "2025-08-02T14:45:57.693355"
+    },
+    {
+        "title": "Great Location I 1 Bedroom Flat ",
+        "location": {
+            "id": "3128",
+            "full_name": "Damac Heights, Dubai Marina, Dubai",
+            "coordinates": {
+                "lat": 25.087251663208008,
+                "lon": 55.145572662353516
+            },
+            "slug": "dubai-marina-damac-heights",
+            "path": "1.50.3128",
+            "type": "TOWER",
+            "name": "Damac Heights",
+            "path_name": "Dubai, Dubai Marina"
+        },
+        "price": {
+            "value": 125000,
+            "currency": "AED",
+            "period": "yearly",
+            "is_hidden": false
+        },
+        "bedrooms": "1",
+        "bathrooms": "2",
+        "size_sqft": {
+            "value": 875,
+            "unit": "sqft"
+        },
+        "property_type": null,
+        "url": null,
+        "scraped_date": "2025-08-02T14:45:57.693358"
+    },
+    {
+        "title": "Fully Furnished 1-BR | Vacant | Close to Metro",
+        "location": {
+            "id": "3145",
+            "full_name": "Marina Diamond 4, Marina Diamonds, Dubai Marina, Dubai",
+            "coordinates": {
+                "lat": 25.080137252807617,
+                "lon": 55.145240783691406
+            },
+            "slug": "dubai-marina-marina-diamonds-marina-diamond-4",
+            "path": "1.50.720.3145",
+            "type": "TOWER",
+            "name": "Marina Diamond 4",
+            "path_name": "Dubai, Dubai Marina, Marina Diamonds"
+        },
+        "price": {
+            "value": 75000,
+            "currency": "AED",
+            "period": "yearly",
+            "is_hidden": false
+        },
+        "bedrooms": "1",
+        "bathrooms": "1",
+        "size_sqft": {
+            "value": 674,
+            "unit": "sqft"
+        },
+        "property_type": null,
+        "url": null,
+        "scraped_date": "2025-08-02T14:45:57.693360"
+    },
+    {
+        "title": "Modern Living | Elegant Location | Spacious layout",
+        "location": {
+            "id": "3140",
+            "full_name": "Bay Central West, Bay Central, Dubai Marina, Dubai",
+            "coordinates": {
+                "lat": 25.0782413482666,
+                "lon": 55.13748550415039
+            },
+            "slug": "dubai-marina-bay-central-bay-central-west",
+            "path": "1.50.719.3140",
+            "type": "TOWER",
+            "name": "Bay Central West",
+            "path_name": "Dubai, Dubai Marina, Bay Central"
+        },
+        "price": {
+            "value": 105000,
+            "currency": "AED",
+            "period": "yearly",
+            "is_hidden": false
+        },
+        "bedrooms": "1",
+        "bathrooms": "2",
+        "size_sqft": {
+            "value": 695,
+            "unit": "sqft"
+        },
+        "property_type": null,
+        "url": null,
+        "scraped_date": "2025-08-02T14:45:57.693362"
+    },
+    {
+        "title": "Unfurnished unit | Well Maintained | Higher Floor",
+        "location": {
+            "id": "3059",
+            "full_name": "MAG 218, Dubai Marina, Dubai",
+            "coordinates": {
+                "lat": 25.087926864624023,
+                "lon": 55.14922332763672
+            },
+            "slug": "dubai-marina-mag-218",
+            "path": "1.50.3059",
+            "type": "TOWER",
+            "name": "MAG 218",
+            "path_name": "Dubai, Dubai Marina"
+        },
+        "price": {
+            "value": 86500,
+            "currency": "AED",
+            "period": "yearly",
+            "is_hidden": false
+        },
+        "bedrooms": "1",
+        "bathrooms": "2",
+        "size_sqft": {
+            "value": 898,
+            "unit": "sqft"
+        },
+        "property_type": null,
+        "url": null,
+        "scraped_date": "2025-08-02T14:45:57.693366"
+    },
+    {
+        "title": "2BR+STUDY |Full Marina View | Prime Location",
+        "location": {
+            "id": "3183",
+            "full_name": "Al Yass Tower, Emaar 6 Towers, Dubai Marina, Dubai",
+            "coordinates": {
+                "lat": 25.08348274230957,
+                "lon": 55.14868927001953
+            },
+            "slug": "dubai-marina-emaar-6-towers-al-yass-tower",
+            "path": "1.50.732.3183",
+            "type": "TOWER",
+            "name": "Al Yass Tower",
+            "path_name": "Dubai, Dubai Marina, Emaar 6 Towers"
+        },
+        "price": {
+            "value": 200000,
+            "currency": "AED",
+            "period": "yearly",
+            "is_hidden": false
+        },
+        "bedrooms": "2",
+        "bathrooms": "2",
+        "size_sqft": {
+            "value": 1705,
+            "unit": "sqft"
+        },
+        "property_type": null,
+        "url": null,
+        "scraped_date": "2025-08-02T14:45:57.693368"
+    },
+    {
+        "title": "Stunning Marina View | Available | Bills Included",
+        "location": {
+            "id": "9645",
+            "full_name": "Orra Harbour Residences and Hotel Apartments, Dubai Marina, Dubai",
+            "coordinates": {
+                "lat": 25.07892417907715,
+                "lon": 55.14095687866211
+            },
+            "slug": "dubai-marina-orra-harbour-residences-and-hotel-apartments",
+            "path": "1.50.9645",
+            "type": "SUBCOMMUNITY",
+            "name": "Orra Harbour Residences and Hotel Apartments",
+            "path_name": "Dubai, Dubai Marina"
+        },
+        "price": {
+            "value": 170000,
+            "currency": "AED",
+            "period": "yearly",
+            "is_hidden": false
+        },
+        "bedrooms": "2",
+        "bathrooms": "2",
+        "size_sqft": {
+            "value": 1350,
+            "unit": "sqft"
+        },
+        "property_type": null,
+        "url": null,
+        "scraped_date": "2025-08-02T14:45:57.693371"
+    },
+    {
+        "title": "Palm View | Large Balcony | Furnished",
+        "location": {
+            "id": "3128",
+            "full_name": "Damac Heights, Dubai Marina, Dubai",
+            "coordinates": {
+                "lat": 25.087251663208008,
+                "lon": 55.145572662353516
+            },
+            "slug": "dubai-marina-damac-heights",
+            "path": "1.50.3128",
+            "type": "TOWER",
+            "name": "Damac Heights",
+            "path_name": "Dubai, Dubai Marina"
+        },
+        "price": {
+            "value": 230000,
+            "currency": "AED",
+            "period": "yearly",
+            "is_hidden": false
+        },
+        "bedrooms": "2",
+        "bathrooms": "3",
+        "size_sqft": {
+            "value": 1555,
+            "unit": "sqft"
+        },
+        "property_type": null,
+        "url": null,
+        "scraped_date": "2025-08-02T14:45:57.693373"
+    },
+    {
+        "title": "Prime Location | Stunning Views | Modern Comfort",
+        "location": {
+            "id": "50",
+            "full_name": "Dubai Marina, Dubai",
+            "coordinates": {
+                "lat": 25.078367233276367,
+                "lon": 55.140411376953125
+            },
+            "slug": "dubai-marina",
+            "path": "1.50",
+            "type": "COMMUNITY",
+            "name": "Dubai Marina",
+            "path_name": "Dubai"
+        },
+        "price": {
+            "value": 180000,
+            "currency": "AED",
+            "period": "yearly",
+            "is_hidden": false
+        },
+        "bedrooms": "2",
+        "bathrooms": "2",
+        "size_sqft": {
+            "value": 1653,
+            "unit": "sqft"
+        },
+        "property_type": null,
+        "url": null,
+        "scraped_date": "2025-08-02T14:45:57.693375"
+    },
+    {
+        "title": "DIRECT FROM THE LANDLORD| BRIGHT AND SPACIOUS |",
+        "location": {
+            "id": "3122",
+            "full_name": "No.9, Dubai Marina, Dubai",
+            "coordinates": {
+                "lat": 25.083330154418945,
+                "lon": 55.144752502441406
+            },
+            "slug": "dubai-marina-no-9",
+            "path": "1.50.3122",
+            "type": "TOWER",
+            "name": "No.9",
+            "path_name": "Dubai, Dubai Marina"
+        },
+        "price": {
+            "value": 255000,
+            "currency": "AED",
+            "period": "yearly",
+            "is_hidden": false
+        },
+        "bedrooms": "3",
+        "bathrooms": "4",
+        "size_sqft": {
+            "value": 1767,
+            "unit": "sqft"
+        },
+        "property_type": null,
+        "url": null,
+        "scraped_date": "2025-08-02T14:45:57.693378"
+    },
+    {
+        "title": "Fully Furnished | Ready to Move In | Best Price",
+        "location": {
+            "id": "3089",
+            "full_name": "The Belvedere, Dubai Marina, Dubai",
+            "coordinates": {
+                "lat": 25.06808853149414,
+                "lon": 55.13067626953125
+            },
+            "slug": "dubai-marina-the-belvedere",
+            "path": "1.50.3089",
+            "type": "TOWER",
+            "name": "The Belvedere",
+            "path_name": "Dubai, Dubai Marina"
+        },
+        "price": {
+            "value": 85000,
+            "currency": "AED",
+            "period": "yearly",
+            "is_hidden": false
+        },
+        "bedrooms": "1",
+        "bathrooms": "2",
+        "size_sqft": {
+            "value": 1020,
+            "unit": "sqft"
+        },
+        "property_type": null,
+        "url": null,
+        "scraped_date": "2025-08-02T14:45:57.693380"
+    },
+    {
+        "title": "FENDI STYLE l ELEGANT l BREATHTAKING SEA VIEWS",
+        "location": {
+            "id": "3128",
+            "full_name": "Damac Heights, Dubai Marina, Dubai",
+            "coordinates": {
+                "lat": 25.087251663208008,
+                "lon": 55.145572662353516
+            },
+            "slug": "dubai-marina-damac-heights",
+            "path": "1.50.3128",
+            "type": "TOWER",
+            "name": "Damac Heights",
+            "path_name": "Dubai, Dubai Marina"
+        },
+        "price": {
+            "value": 120000,
+            "currency": "AED",
+            "period": "yearly",
+            "is_hidden": false
+        },
+        "bedrooms": "1",
+        "bathrooms": "2",
+        "size_sqft": {
+            "value": 1072,
+            "unit": "sqft"
+        },
+        "property_type": null,
+        "url": null,
+        "scraped_date": "2025-08-02T14:45:57.693382"
+    },
+    {
+        "title": "Full Marina Views | High Floor | 3BR + Maid",
+        "location": {
+            "id": "3140",
+            "full_name": "Bay Central West, Bay Central, Dubai Marina, Dubai",
+            "coordinates": {
+                "lat": 25.0782413482666,
+                "lon": 55.13748550415039
+            },
+            "slug": "dubai-marina-bay-central-bay-central-west",
+            "path": "1.50.719.3140",
+            "type": "TOWER",
+            "name": "Bay Central West",
+            "path_name": "Dubai, Dubai Marina, Bay Central"
+        },
+        "price": {
+            "value": 180000,
+            "currency": "AED",
+            "period": "yearly",
+            "is_hidden": false
+        },
+        "bedrooms": "3",
+        "bathrooms": "4",
+        "size_sqft": {
+            "value": 1560,
+            "unit": "sqft"
+        },
+        "property_type": null,
+        "url": null,
+        "scraped_date": "2025-08-02T14:45:57.693384"
+    },
+    {
+        "title": "COZY APARTMENT,PRIME LOCATION,GREAT DEAL!",
+        "location": {
+            "id": "3092",
+            "full_name": "Princess Tower, Dubai Marina, Dubai",
+            "coordinates": {
+                "lat": 25.08863067626953,
+                "lon": 55.148170471191406
+            },
+            "slug": "dubai-marina-princess-tower",
+            "path": "1.50.3092",
+            "type": "TOWER",
+            "name": "Princess Tower",
+            "path_name": "Dubai, Dubai Marina"
+        },
+        "price": {
+            "value": 90000,
+            "currency": "AED",
+            "period": "yearly",
+            "is_hidden": false
+        },
+        "bedrooms": "1",
+        "bathrooms": "2",
+        "size_sqft": {
+            "value": 923,
+            "unit": "sqft"
+        },
+        "property_type": null,
+        "url": null,
+        "scraped_date": "2025-08-02T14:45:57.693387"
+    },
+    {
+        "title": "Prime Location | Ready to Move In | Pool View",
+        "location": {
+            "id": "3154",
+            "full_name": "Shemara Tower, Marina Promenade, Dubai Marina, Dubai",
+            "coordinates": {
+                "lat": 25.07430648803711,
+                "lon": 55.132694244384766
+            },
+            "slug": "dubai-marina-marina-promenade-shemara-tower",
+            "path": "1.50.721.3154",
+            "type": "TOWER",
+            "name": "Shemara Tower",
+            "path_name": "Dubai, Dubai Marina, Marina Promenade"
+        },
+        "price": {
+            "value": 180000,
+            "currency": "AED",
+            "period": "yearly",
+            "is_hidden": false
+        },
+        "bedrooms": "2",
+        "bathrooms": "2",
+        "size_sqft": {
+            "value": 1410,
+            "unit": "sqft"
+        },
+        "property_type": null,
+        "url": null,
+        "scraped_date": "2025-08-02T14:45:57.693389"
+    }
+]
