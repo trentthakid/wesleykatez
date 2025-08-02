@@ -24,7 +24,9 @@ logging.basicConfig(level=logging.DEBUG)
 
 # Create Flask app
 app = Flask(__name__)
-app.secret_key = os.environ.get("SESSION_SECRET", "dev-secret-key-change-in-production")
+app.secret_key = os.environ.get("FLASK_SECRET_KEY", "a-strong-default-secret-key-for-dev")
+if app.secret_key == "a-strong-default-secret-key-for-dev":
+    logging.warning("SECURITY WARNING: Using default FLASK_SECRET_KEY. Set a strong, random secret in your environment for production.")
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
 # Configuration
