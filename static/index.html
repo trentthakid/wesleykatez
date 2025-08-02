@@ -24,12 +24,12 @@
         }
     </script>
     <style>
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
         .fade-in { animation: fadeIn 0.3s ease-in; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .loader { border: 2px solid #f3f3f3; border-top: 2px solid #1e40af; border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .dashboard-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .dashboard-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -102,7 +102,7 @@
             <!-- Main Content Area -->
             <main class="flex-1">
                 <!-- Dashboard Tab -->
-                <div v-show="activeTab === 'dashboard'" class="tab-content active fade-in">
+                <div v-show="activeTab === 'dashboard'" class="tab-content fade-in">
                     <div class="mb-6">
                         <h2 class="text-3xl font-bold mb-2">Dashboard</h2>
                         <p class="text-gray-600">Your real estate command center - {{ new Date().toLocaleDateString() }}</p>
@@ -637,6 +637,7 @@
 
                 // Navigation
                 const showTab = (tabId) => {
+                    console.log('Switching to tab:', tabId);
                     activeTab.value = tabId;
                     
                     // Load data when switching tabs
@@ -649,6 +650,8 @@
                     } else if (tabId === 'data-hub') {
                         loadKnowledgeStats();
                     }
+                    
+                    console.log('Active tab is now:', activeTab.value);
                 };
 
                 const getTabClass = (tabId) => {
