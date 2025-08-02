@@ -12,6 +12,40 @@ from datetime import datetime, timedelta
 from typing import List, Dict, Any, Optional, Tuple
 from database import get_db_connection
 
+# --- Globals for caching knowledge base data ---
+PALM_JUMEIRAH_DATA = {
+    "trunk_buildings": [],
+    "crescent_developments": [],
+    "restaurants": []
+}
+
+def load_palm_jumeirah_knowledge():
+    """Load Palm Jumeirah specific knowledge from JSON files into memory."""
+    global PALM_JUMEIRAH_DATA
+    knowledge_dir = 'knowledge'
+    files_to_load = {
+        "trunk_buildings": "palm_jumeirah_trunk_buildings.json",
+        "crescent_developments": "palm_jumeirah_crescent_developments.json",
+        "restaurants": "palm_jumeirah_restaurants.json"
+    }
+
+    for key, filename in files_to_load.items():
+        filepath = os.path.join(knowledge_dir, filename)
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                PALM_JUMEIRAH_DATA[key] = json.load(f)
+            logging.info(f"Successfully loaded knowledge from {filename}")
+        except FileNotFoundError:
+            logging.warning(f"Knowledge file not found, skipping: {filepath}")
+        except json.JSONDecodeError:
+            logging.error(f"Error decoding JSON from {filepath}")
+        except Exception as e:
+            logging.error(f"Error loading knowledge file {filepath}: {str(e)}")
+
+# --- Initial Load ---
+load_palm_jumeirah_knowledge()
+
+
 def find_properties_in_text(text: str) -> List[Dict[str, str]]:
     """
     Find property references in text using pattern matching and database lookup.
@@ -372,35 +406,39 @@ def search_knowledge_base(query: str, limit: int = 5) -> List[Dict[str, Any]]:
 
 def get_relevant_context(query: str) -> str:
     """
-    Get relevant context from knowledge base for AI responses.
+    Get relevant context from knowledge base and structured data for AI responses.
     """
+    context_parts = []
+    query_lower = query.lower()
+
+    # 1. Search structured Palm Jumeirah data
+    palm_context = []
+    for building in PALM_JUMEIRAH_DATA.get("trunk_buildings", []):
+        if building['name'].lower() in query_lower:
+            palm_context.append(f"- {building['name']} is a {building['property_type']} on the Trunk developed by {building['developer']}, completed in {building['completion_year']}.")
+    
+    for dev in PALM_JUMEIRAH_DATA.get("crescent_developments", []):
+        if dev['name'].lower() in query_lower:
+            palm_context.append(f"- {dev['name']} is a {dev['property_type']} on the Crescent developed by {dev['developer']}. Residential component: {'Yes' if dev['residential_component'] else 'No'}.")
+
+    if palm_context:
+        context_parts.append("Structured Palm Jumeirah Knowledge:\n" + "\n".join(palm_context))
+
+    # 2. Search document-based knowledge base (existing functionality)
     try:
-        # Search knowledge base
-        relevant_items = search_knowledge_base(query, limit=3)
-        
-        if not relevant_items:
-            return "No relevant documents found in knowledge base."
-        
-        context = "Relevant information from knowledge base:\n\n"
-        
-        for item in relevant_items:
-            context += f"Document: {item['title']}\n"
-            context += f"Content: {item['content_preview']}\n"
-            
-            # Add property information if available
-            if 'properties_mentioned' in item['metadata']:
-                properties = item['metadata']['properties_mentioned']
-                if properties:
-                    property_list = [f"{p['building']} Unit {p['unit']}" for p in properties]
-                    context += f"Properties mentioned: {', '.join(property_list)}\n"
-            
-            context += "\n"
-        
-        return context
-        
+        relevant_items = search_knowledge_base(query, limit=2)
+        if relevant_items:
+            doc_context = []
+            for item in relevant_items:
+                doc_context.append(f"- From document '{item['title']}': {item['content_preview']}")
+            context_parts.append("Relevant Documents:\n" + "\n".join(doc_context))
     except Exception as e:
-        logging.error(f"Error getting relevant context: {str(e)}")
-        return "Error retrieving context from knowledge base."
+        logging.error(f"Error searching knowledge base for context: {str(e)}")
+
+    if not context_parts:
+        return "No specific context found for the query."
+
+    return "\n\n".join(context_parts)
 
 def update_knowledge_item_tags(item_id: int, tags: List[str]) -> bool:
     """

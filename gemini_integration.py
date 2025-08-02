@@ -147,12 +147,19 @@ Only include information that is clearly stated in the document. Use null for mi
             Generated property description
         """
         prompt = f"""
-You are a professional real estate copywriter. Create a compelling property description based on the following information:
+You are AURA, drafting a property listing for Wesley Kateguru, a top agent specializing in luxury properties on the Palm Jumeirah.
+The description must reflect his professional brand: sophisticated, detailed, and focused on unique value propositions for high-net-worth clients.
+The target audience appreciates specifics and lifestyle benefits. The description will be used on platforms like Property Finder and Bayut.
 
-Property Details:
-- Building: {property_data.get('building', 'N/A')}
-- Unit: {property_data.get('unit', 'N/A')}
-- Type: {property_data.get('property_type', 'N/A')}
+**Wesley's Expert Knowledge to Incorporate:**
+- For villas on the fronds, mention the value of the view (e.g., "sought-after sunset views of the Marina skyline" for even-numbered villas, "serene sunrise views" for odd-numbered villas).
+- Highlight proximity to key landmarks like Nakheel Mall, The Pointe, or specific beach clubs.
+- If it's a bespoke/custom villa, emphasize its uniqueness compared to standard Nakheel villas.
+
+**Property Details:**
+- Building/Villa Type: {property_data.get('building', 'N/A')}
+- Unit/Villa Number: {property_data.get('unit', 'N/A')}
+- Property Type: {property_data.get('property_type', 'N/A')}
 - Bedrooms: {property_data.get('bedrooms', 'N/A')}
 - Bathrooms: {property_data.get('bathrooms', 'N/A')}
 - Size: {property_data.get('size_sqft', 'N/A')} sqft
@@ -160,14 +167,13 @@ Property Details:
 - Area: {property_data.get('area', 'N/A')}
 - Amenities: {property_data.get('amenities', 'N/A')}
 
-Write a professional, engaging property description that:
-1. Highlights the key features and benefits
-2. Mentions the location advantages
-3. Uses persuasive language to attract potential buyers/tenants
-4. Is approximately 150-250 words
-5. Includes a compelling opening line
-
-Focus on lifestyle benefits and investment potential where appropriate.
+**Task:**
+Write a professional, engaging property description (150-250 words) that:
+1.  Starts with a powerful opening line that captures the essence of the property.
+2.  Weaves in the expert knowledge points mentioned above where applicable.
+3.  Highlights 2-3 unique selling points (e.g., specific upgrades, rare layout, view).
+4.  Uses sophisticated and persuasive language.
+5.  Ends with a clear call to action to contact Wesley Kateguru for a private viewing.
 """
         
         return self.generate_response(prompt)
@@ -183,22 +189,28 @@ Focus on lifestyle benefits and investment potential where appropriate.
             Market analysis and insights
         """
         prompt = f"""
-You are a real estate market analyst. Analyze the following market data and provide insights:
+You are AURA, acting as a senior market analyst for Wesley Kateguru, a Palm Jumeirah specialist.
+Your analysis must be data-driven, objective, and tailored for Wesley's use in advising high-net-worth clients.
+The focus should be on identifying actionable insights for the Palm Jumeirah market.
 
-Market Data:
+**Expert Knowledge to Apply:**
+- Reference specific zones (Trunk, Fronds, Crescent) and property types (e.g., Signature Villas vs. Garden Homes, branded vs. non-branded residences).
+- Correlate trends with known market drivers (e.g., new developments like Atlantis The Royal, infrastructure like the Palm Monorail).
+
+**Market Data Provided:**
 {json.dumps(market_data, indent=2)}
 
-Please provide:
-1. Key trends in the market
-2. Price movements and patterns
-3. Investment opportunities
-4. Market outlook
-5. Recommendations for buyers and sellers
-
-Keep the analysis professional and data-driven, suitable for real estate professionals.
+**Task:**
+Generate a concise, professional market analysis report. Structure it as follows:
+1.  **Executive Summary:** A brief, high-level overview of the current market state on Palm Jumeirah.
+2.  **Key Trends:** 3-4 bullet points on the most significant current trends (e.g., "Increasing demand for bespoke villas on the fronds," "Price stabilization in Trunk apartments").
+3.  **Price Analysis:** Note any significant price movements, including percentage changes if possible. Highlight which segments are overperforming or underperforming.
+4.  **Investment Opportunities:** Identify 1-2 specific, actionable investment opportunities for Wesley's clients (e.g., "Look for undervalued Garden Homes on lower-numbered fronds for renovation potential," "Consider branded residences on the Crescent for strong rental yields").
+5.  **Market Outlook:** A brief forward-looking statement on what to expect in the next quarter.
+6.  **Client Recommendations:** Separate, concise advice for potential buyers and sellers in the current market.
 """
         
-        return self.generate_response(prompt, model="gemini-2.5-pro")
+        return self.generate_response(prompt, model="gemini-1.5-pro")
     
     def generate_follow_up_email(self, contact_info: Dict[str, Any], context: str = "") -> str:
         """
@@ -212,22 +224,26 @@ Keep the analysis professional and data-driven, suitable for real estate profess
             Generated email content
         """
         prompt = f"""
-You are a professional real estate agent. Write a personalized follow-up email based on the following information:
+You are AURA, drafting a follow-up email on behalf of Wesley Kateguru.
+Your goal is to save him time while maintaining his professional and personal touch. The tone should be warm, professional, and action-oriented.
 
-Contact Information:
+**Contact Information:**
 {json.dumps(contact_info, indent=2)}
 
-Context: {context}
+**Context of Last Interaction:**
+{context}
 
-Write a professional, warm, and personalized email that:
-1. References our previous interaction
-2. Provides value (market insights, property suggestions, etc.)
-3. Has a clear call-to-action
-4. Maintains a professional but friendly tone
-5. Is concise (under 200 words)
+**Task:**
+Draft a concise and effective follow-up email (under 150 words).
+1.  **Subject Line:** Create a compelling subject line that is personalized and likely to be opened.
+2.  **Email Body:**
+    -   Start with a warm, personal greeting.
+    -   Briefly reference your last conversation (e.g., "It was a pleasure speaking with you about...").
+    -   Provide immediate value. This could be a link to a relevant new listing, a brief market insight about Palm Jumeirah, or an answer to a question they had.
+    -   Include a clear and easy call-to-action (e.g., "Are you available for a brief call tomorrow to discuss?", "I have a few properties I think you'll love, when is a good time to view them?").
+    -   Sign off as Wesley Kateguru.
 
-Include both subject line and email body.
-Format as:
+**Format:**
 Subject: [subject line]
 
 [email body]
@@ -317,18 +333,21 @@ Use professional financial terminology and provide clear recommendations.
         ])
         
         prompt = f"""
-Summarize the following conversation between a real estate agent and client:
+You are AURA, Wesley Kateguru's assistant manager. Your task is to create a concise, actionable summary of a client conversation for Wesley's review.
+The summary should be structured for quick reading and decision-making.
 
+**Conversation Text:**
 {conversation_text}
 
-Provide a concise summary that includes:
-1. Client's requirements and preferences
-2. Properties discussed
-3. Key decisions or next steps
-4. Important dates or deadlines
-5. Action items for follow-up
+**Task:**
+Provide a summary in the following format:
+- **Client Requirements:** (e.g., 3-bedroom villa on Palm Jumeirah, budget AED 10M, sunset view preferred)
+- **Properties Discussed:** (e.g., Signature Villa, Frond K; Garden Home, Frond M)
+- **Key Outcomes/Decisions:** (e.g., Client is interested in viewing the Frond K villa)
+- **Action Items for Wesley:** (e.g., "Call client tomorrow to schedule viewing," "Prepare CMA for Frond M villa")
+- **Urgency/Sentiment:** (e.g., High urgency, client is ready to buy)
 
-Keep the summary professional and actionable.
+Keep the summary professional and focused on what Wesley needs to do next.
 """
         
         return self.generate_response(prompt)
@@ -402,20 +421,38 @@ Only include information that is clearly stated. Use null for missing informatio
         Determine the user's intent from the conversation history.
         """
         prompt = f"""
-You are a real estate AI assistant. Your task is to determine the user's intent from the following conversation history.
+You are AURA, an AI assistant manager for a real estate agent. Your primary job is to understand the user's command, identify their intent, and extract key information (entities).
 
-Conversation History:
+**Conversation History:**
 {json.dumps(conversation_history, indent=2)}
 
-Please identify the user's intent and extract any relevant entities. The possible intents are: "find_owner", "create_task", "create_contact", "get_follow_ups", "score_leads", "find_buyers", "search_properties", "get_market_analysis", "get_performance_summary", "get_daily_briefing", "unknown".
+**Task:**
+Analyze the last user message in the conversation history and determine the intent.
+Return a single JSON object with the `intent` and any `entities`.
 
-Return the intent and any extracted entities in JSON format. For example:
+**Possible Intents & Examples:**
+- `find_owner`: "who owns shoreline unit 505?", "get me the owner of frond p villa 22"
+- `create_task`: "remind me to call ahmed tomorrow at 10am", "add a viewing for atlantis royal penthouse on friday"
+- `create_contact`: "new contact: John Smith, john@email.com, +971501234567", "add Jane Doe to my contacts"
+- `get_follow_ups`: "who do i need to follow up with?", "show me my follow ups"
+- `score_leads`: "score my leads", "who are my hottest leads right now?"
+- `find_buyers`: "find buyers for shoreline apartment 1203", "who is looking for a 4 bed garden home?"
+- `search_properties`: "show me available 3 bed apartments in oceana", "search for villas on frond g under 15M"
+- `get_market_analysis`: "what are the latest market trends on the palm?", "give me a market analysis for the crescent"
+- `get_performance_summary`: "how am i doing this month?", "show me my performance"
+- `get_daily_briefing`: "what's my daily briefing?", "give me the rundown for today"
+- `unknown`: Use this if the intent is unclear or doesn't fit any other category.
+
+**Example Output Format:**
 {{
-    "intent": "create_contact",
-    "entities": {{
-        "task_description": "call Ahmed Al Rashid tomorrow at 9am"
-    }}
+  "intent": "create_task",
+  "entities": {{
+    "task_description": "call ahmed tomorrow at 10am",
+    "due_date": "2025-08-03T10:00:00"
+  }}
 }}
+
+Now, based on the conversation history provided, what is the intent of the last user message?
 """
         
         try:

@@ -1,0 +1,146 @@
+[
+    {
+        "name": "Shoreline Apartments",
+        "property_type": "Residential Apartment",
+        "developer": "Nakheel",
+        "completion_year": 2007,
+        "buildings": 20,
+        "floors": 10,
+        "unit_types": "1-4BR Apts, 4BR Penthouses"
+    },
+    {
+        "name": "Golden Mile",
+        "property_type": "Residential Apartment",
+        "developer": "Nakheel, IFA Hotels & Resorts",
+        "completion_year": 2009,
+        "buildings": 10,
+        "floors": 10,
+        "unit_types": "1-3BR Apts, Penthouses"
+    },
+    {
+        "name": "Marina Residences",
+        "property_type": "Residential Apartment",
+        "developer": "Nakheel",
+        "completion_year": 2009,
+        "buildings": 6,
+        "floors": 15,
+        "unit_types": "1-3BR Apts, 4BR Penthouses, 5BR Townhouses"
+    },
+    {
+        "name": "The Palm Tower",
+        "property_type": "Mixed-Use (Hotel & Res.)",
+        "developer": "Nakheel",
+        "completion_year": 2021,
+        "buildings": 1,
+        "floors": 52,
+        "unit_types": "Studios, 1-3BR Apts (Residences)"
+    },
+    {
+        "name": "Oceana Residences",
+        "property_type": "Residential Apartment",
+        "developer": "Seven Tides International",
+        "completion_year": 2009,
+        "buildings": 7,
+        "floors": 13,
+        "unit_types": "1-3BR Apts, Penthouses"
+    },
+    {
+        "name": "Tiara Residences",
+        "property_type": "Residential Apartment",
+        "developer": "Zabeel Investments, Parshwa Holdings Ltd",
+        "completion_year": 2009,
+        "buildings": 7,
+        "floors": 15,
+        "unit_types": "1-3BR Apts, 4BR Penthouses"
+    },
+    {
+        "name": "Anantara Residences",
+        "property_type": "Hotel Apartment",
+        "developer": "Seven Tides International",
+        "completion_year": 2014,
+        "buildings": 2,
+        "floors": 12,
+        "unit_types": "Studios, 1-2BR Apts, 3-5BR Penthouses"
+    },
+    {
+        "name": "FIVE Palm Jumeirah",
+        "property_type": "Mixed-Use (Hotel & Res.)",
+        "developer": "FIVE Holdings",
+        "completion_year": 2016,
+        "buildings": 1,
+        "floors": 16,
+        "unit_types": "Hotel Rooms, Furnished Residences"
+    },
+    {
+        "name": "One at Palm Jumeirah",
+        "property_type": "Residential Apartment",
+        "developer": "Omniyat Properties",
+        "completion_year": 2021,
+        "buildings": 1,
+        "floors": 25,
+        "unit_types": "3-5BR Residences, Penthouses"
+    },
+    {
+        "name": "The 8",
+        "property_type": "Mixed-Use (Hotel & Res.)",
+        "developer": "IFA Hotels & Resorts",
+        "completion_year": 2019,
+        "buildings": 1,
+        "floors": 8,
+        "unit_types": "1-3BR Apts, Townhouses, Penthouses"
+    },
+    {
+        "name": "Fairmont The Palm Residences",
+        "property_type": "Mixed-Use (Hotel & Res.)",
+        "developer": "IFA Hotels & Resorts",
+        "completion_year": 2012,
+        "buildings": 2,
+        "floors": 12,
+        "unit_types": "1-5BR Apts, Townhouses, Penthouses"
+    },
+    {
+        "name": "Andaz Dubai The Palm",
+        "property_type": "Mixed-Use (Hotel & Res.)",
+        "developer": "Wasl Asset Management Group",
+        "completion_year": 2019,
+        "buildings": 2,
+        "floors": 15,
+        "unit_types": "Hotel Rooms, Serviced Apts"
+    },
+    {
+        "name": "Dukes The Palm",
+        "property_type": "Mixed-Use (Hotel & Res.)",
+        "developer": "Seven Tides International",
+        "completion_year": 2016,
+        "buildings": 1,
+        "floors": 17,
+        "unit_types": "Hotel Rooms, Studio & 1BR Apts"
+    },
+    {
+        "name": "Azure Residences",
+        "property_type": "Residential Apartment",
+        "developer": "Nakheel",
+        "completion_year": 2016,
+        "buildings": 1,
+        "floors": 10,
+        "unit_types": "1-2BR Apts"
+    },
+    {
+        "name": "Palm Views",
+        "property_type": "Residential Apartment",
+        "developer": "Nakheel",
+        "completion_year": 2014,
+        "buildings": 2,
+        "floors": 5,
+        "unit_types": "Studio Apts (Pied-à-terre)"
+    },
+    {
+        "name": "Seven Palm",
+        "property_type": "Mixed-Use (Hotel & Res.)",
+        "developer": "Seven Tides International",
+        "completion_year": 2023,
+        "buildings": 2,
+        "floors": 14,
+        "unit_types": "Hotel Rooms, Studio to 3BR Apts"
+    }
+]

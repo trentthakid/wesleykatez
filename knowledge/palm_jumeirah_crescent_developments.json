@@ -1,0 +1,119 @@
+[
+    {
+        "name": "Atlantis, The Palm",
+        "location": "Crescent (Apex)",
+        "property_type": "Hotel & Resort",
+        "developer": "Kerzner International",
+        "completion_year": 2008,
+        "residential_component": false,
+        "residential_unit_types": null
+    },
+    {
+        "name": "Atlantis The Royal",
+        "location": "Crescent (East)",
+        "property_type": "Hotel & Branded Res.",
+        "developer": "Kerzner International",
+        "completion_year": 2023,
+        "residential_component": true,
+        "residential_unit_types": "2-5BR Apts, Penthouses"
+    },
+    {
+        "name": "Jumeirah Zabeel Saray",
+        "location": "Crescent (West)",
+        "property_type": "Hotel & Branded Res.",
+        "developer": "Zabeel Investments",
+        "completion_year": 2009,
+        "residential_component": true,
+        "residential_unit_types": "4-5BR Royal Residences (Villas)"
+    },
+    {
+        "name": "W Dubai – The Palm",
+        "location": "Crescent (West)",
+        "property_type": "Hotel & Branded Res.",
+        "developer": "Al Mana Global",
+        "completion_year": 2018,
+        "residential_component": true,
+        "residential_unit_types": "Apartments & Penthouses"
+    },
+    {
+        "name": "Anantara The Palm",
+        "location": "Crescent (East)",
+        "property_type": "Hotel & Branded Res.",
+        "developer": "Seven Tides International",
+        "completion_year": 2013,
+        "residential_component": true,
+        "residential_unit_types": "Apartments & Penthouses"
+    },
+    {
+        "name": "Waldorf Astoria",
+        "location": "Crescent (East)",
+        "property_type": "Hotel & Resort",
+        "developer": "N/A",
+        "completion_year": 2014,
+        "residential_component": false,
+        "residential_unit_types": null
+    },
+    {
+        "name": "Sofitel Dubai The Palm",
+        "location": "Crescent (East)",
+        "property_type": "Hotel & Resort",
+        "developer": "N/A",
+        "completion_year": 2013,
+        "residential_component": false,
+        "residential_unit_types": null
+    },
+    {
+        "name": "Kempinski Hotel & Residences",
+        "location": "Crescent (West)",
+        "property_type": "Branded Residences",
+        "developer": "Emerald Palace Group",
+        "completion_year": 2010,
+        "residential_component": true,
+        "residential_unit_types": "Suites, Penthouses, Villas"
+    },
+    {
+        "name": "Rixos The Palm",
+        "location": "Crescent (East)",
+        "property_type": "Hotel & Suites",
+        "developer": "Rixos Hotels",
+        "completion_year": 2012,
+        "residential_component": false,
+        "residential_unit_types": null
+    },
+    {
+        "name": "One&Only The Palm",
+        "location": "Crescent (West)",
+        "property_type": "Hotel & Resort",
+        "developer": "Kerzner International",
+        "completion_year": 2010,
+        "residential_component": false,
+        "residential_unit_types": null
+    },
+    {
+        "name": "XXII Carat Villas",
+        "location": "Crescent (West)",
+        "property_type": "Residential Villas",
+        "developer": "Forum Group",
+        "completion_year": 2019,
+        "residential_component": true,
+        "residential_unit_types": "7BR Villas"
+    },
+    {
+        "name": "Balqis Residence",
+        "location": "Crescent (West)",
+        "property_type": "Residential (Mixed)",
+        "developer": "IFA Hotels & Resorts",
+        "completion_year": 2018,
+        "residential_component": true,
+        "residential_unit_types": "Apts, Penthouses, Townhouses, Villas"
+    },
+    {
+        "name": "Serenia Residences",
+        "location": "Crescent (East)",
+        "property_type": "Residential Apartment",
+        "developer": "Palma Holding",
+        "completion_year": 2018,
+        "residential_component": true,
+        "residential_unit_types": "1-3BR Apts, Penthouses"
+    }
+]

@@ -1,0 +1,58 @@
+[
+    {
+        "venue_name": "Nobu Dubai",
+        "cuisine_type": "Japanese-Peruvian",
+        "location_hub": "Hotel",
+        "parent_property": "Atlantis, The Palm",
+        "price_point": "Fine Dining",
+        "known_for": "Celebrity Chef, Michelin Guide"
+    },
+    {
+        "venue_name": "Hakkasan",
+        "cuisine_type": "Modern Cantonese",
+        "location_hub": "Hotel",
+        "parent_property": "Atlantis, The Palm",
+        "price_point": "Fine Dining",
+        "known_for": "One Michelin Star"
+    },
+    {
+        "venue_name": "Al Safadi",
+        "cuisine_type": "Lebanese",
+        "location_hub": "The Pointe",
+        "parent_property": "The Pointe",
+        "price_point": "Casual Dining",
+        "known_for": "Fountain Views"
+    },
+    {
+        "venue_name": "Ibn Al Bahr",
+        "cuisine_type": "Lebanese / Seafood",
+        "location_hub": "Club Vista Mare",
+        "parent_property": "Club Vista Mare",
+        "price_point": "Casual Dining",
+        "known_for": "Beachfront, Michelin Bib Gourmand"
+    },
+    {
+        "venue_name": "Din Tai Fung",
+        "cuisine_type": "Taiwanese / Chinese",
+        "location_hub": "Nakheel Mall",
+        "parent_property": "Nakheel Mall",
+        "price_point": "Casual Dining",
+        "known_for": "Michelin Guide"
+    },
+    {
+        "venue_name": "Social by Heinz Beck",
+        "cuisine_type": "Modern Italian",
+        "location_hub": "Hotel",
+        "parent_property": "Waldorf Astoria",
+        "price_point": "Fine Dining",
+        "known_for": "Celebrity Chef"
+    },
+    {
+        "venue_name": "SoBe",
+        "cuisine_type": "Latin American",
+        "location_hub": "Hotel",
+        "parent_property": "W Dubai – The Palm",
+        "price_point": "Lounge / Bar",
+        "known_for": "Rooftop, 360° Views"
+    }
+]
