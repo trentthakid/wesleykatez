@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Twin - AI-Powered Real Estate Command Center</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e40af',
+                        secondary: '#3b82f6',
+                        accent: '#f59e0b',
+                        dark: '#0f172a',
+                        light: '#f8fafc'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <div id="app">
+        <!-- Header -->
+        <header class="bg-primary text-white shadow-lg">
+            <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-building text-2xl"></i>
+                    <h1 class="text-2xl font-bold">Digital Twin</h1>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <div class="w-10 h-10 rounded-full bg-secondary flex items-center justify-center"><i class="fas fa-user"></i></div>
+                    <span>Agent Name</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="container mx-auto px-4 py-6 flex">
+            <!-- Sidebar Navigation -->
+            <nav class="w-64 bg-white rounded-lg shadow-md p-4 mr-6 h-fit">
+                <ul class="space-y-2">
+                    <li><button @click="showTab('dashboard')" :class="getTabClass('dashboard')"><i class="fas fa-home"></i><span>Dashboard</span></button></li>
+                    <li><button @click="showTab('assistant')" :class="getTabClass('assistant')"><i class="fas fa-robot"></i><span>AI Assistant</span></button></li>
+                    <li><button @click="showTab('data-hub')" :class="getTabClass('data-hub')"><i class="fas fa-database"></i><span>Data Hub</span></button></li>
+                    <li><button @click="showTab('market')" :class="getTabClass('market')"><i class="fas fa-chart-line"></i><span>Market Intelligence</span></button></li>
+                    <li><button @click="showTab('properties')" :class="getTabClass('properties')"><i class="fas fa-building"></i><span>Properties</span></button></li>
+                    <li><button @click="showTab('contacts')" :class="getTabClass('contacts')"><i class="fas fa-address-book"></i><span>Contacts</span></button></li>
+                </ul>
+            </nav>
+
+            <!-- Main Content Area -->
+            <main class="flex-1">
+                <div v-show="activeTab === 'dashboard'" class="tab-content active">
+                    <div class="mb-6"><h2 class="text-2xl font-bold mb-2">Dashboard</h2><p class="text-gray-600">Your real estate command center</p></div>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                        <div class="dashboard-card bg-white rounded-xl shadow-md p-6 border-l-4 border-primary">...</div>
+                        <div class="dashboard-card bg-white rounded-xl shadow-md p-6 border-l-4 border-secondary">...</div>
+                        <div class="dashboard-card bg-white rounded-xl shadow-md p-6 border-l-4 border-accent">...</div>
+                        <div class="dashboard-card bg-white rounded-xl shadow-md p-6 border-l-4 border-green-500">...</div>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-white rounded-xl shadow-md p-6"><h3 class="text-lg font-semibold mb-4">Market Trends</h3><canvas id="marketChart" height="250"></canvas></div>
+                        <div class="bg-white rounded-xl shadow-md p-6"><h3 class="text-lg font-semibold mb-4">Daily Briefing</h3><div id="daily-briefing-content"></div></div>
+                    </div>
+                </div>
+
+                <div v-show="activeTab === 'assistant'" class="tab-content">
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                        <div id="chat-container" class="h-[600px] overflow-y-auto p-4 bg-gray-50"></div>
+                        <div class="border-t p-4 bg-white">
+                            <div class="flex">
+                                <input type="text" v-model="userInput" @keypress.enter="sendMessage" placeholder="Ask AURA anything..." class="flex-1 border rounded-l-lg py-3 px-4">
+                                <button @click="sendMessage" class="bg-primary text-white px-6 rounded-r-lg"><i class="fas fa-paper-plane"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div v-show="activeTab === 'data-hub'" class="tab-content">
+                    <h2 class="text-2xl font-bold mb-4">Data Hub</h2>
+                    <div class="bg-white rounded-xl shadow-md p-6">
+                        <h3 class="text-lg font-semibold mb-4">Upload Files</h3>
+                        <div id="drop-zone" class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-primary">
+                            <input type="file" id="file-input" class="hidden" multiple @change="handleFileSelect">
+                            <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-3"></i>
+                            <p>Drag & drop files here or click to browse</p>
+                        </div>
+                        <div id="file-list" class="mt-4"></div>
+                        <button @click="uploadFiles" class="mt-4 bg-primary text-white px-4 py-2 rounded-lg" :disabled="filesToUpload.length === 0">Upload Files</button>
+                    </div>
+                </div>
+
+                <div v-show="activeTab === 'market'" class="tab-content"><h2 class="text-2xl font-bold">Market Intelligence</h2></div>
+                <div v-show="activeTab === 'properties'" class="tab-content"><h2 class="text-2xl font-bold">Properties</h2></div>
+                <div v-show="activeTab === 'contacts'" class="tab-content"><h2 class="text-2xl font-bold">Contacts</h2></div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        const { createApp, ref, onMounted, nextTick } = Vue
+
+        createApp({
+            setup() {
+                const activeTab = ref('dashboard');
+                const filesToUpload = ref([]);
+                const userInput = ref('');
+                const messages = ref([]);
+                const isLoading = ref(false);
+
+                const showTab = (tabId) => activeTab.value = tabId;
+
+                const getTabClass = (tabId) => {
+                    let base = 'w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3';
+                    return activeTab.value === tabId ? `${base} active bg-primary text-white` : base;
+                };
+                
+                const handleFileSelect = (e) => {
+                    filesToUpload.value = Array.from(e.target.files);
+                    updateFileListUI();
+                };
+
+                const updateFileListUI = () => {
+                    const fileListDiv = document.getElementById('file-list');
+                    fileListDiv.innerHTML = '';
+                    filesToUpload.value.forEach(f => {
+                        const p = document.createElement('p');
+                        p.textContent = f.name;
+                        fileListDiv.appendChild(p);
+                    });
+                };
+
+                const uploadFiles = async () => {
+                    if (filesToUpload.value.length === 0) return;
+                    const formData = new FormData();
+                    filesToUpload.value.forEach(f => formData.append('files', f));
+                    try {
+                        const res = await fetch('/api/upload', { method: 'POST', body: formData });
+                        const data = await res.json();
+                        alert(data.message || data.error);
+                        filesToUpload.value = [];
+                        updateFileListUI();
+                    } catch (e) {
+                        alert('Upload failed.');
+                    }
+                };
+
+                const addMessage = async (content, sender) => {
+                    const chatContainer = document.getElementById('chat-container');
+                    if (!chatContainer) return;
+                    const message = document.createElement('div');
+                    message.className = `chat-message mb-4 flex ${sender === 'user' ? 'justify-end' : 'justify-start'}`;
+                    
+                    if (sender === 'user') {
+                        message.innerHTML = `<div class="bg-primary text-white rounded-lg p-3 max-w-[80%]">${content}</div>`;
+                    } else {
+                        message.innerHTML = `<div class="bg-gray-200 rounded-lg p-3 max-w-[80%]">${content}</div>`;
+                    }
+                    chatContainer.appendChild(message);
+                    await nextTick();
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                };
+
+                const sendMessage = async () => {
+                    const messageText = userInput.value.trim();
+                    if (!messageText) return;
+                    addMessage(messageText, 'user');
+                    userInput.value = '';
+                    isLoading.value = true;
+                    try {
+                        const res = await fetch('/api/chat', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ message: messageText })
+                        });
+                        const data = await res.json();
+                        addMessage(data.message || data.error, 'aura');
+                    } catch (e) {
+                        addMessage('Connection error.', 'aura');
+                    } finally {
+                        isLoading.value = false;
+                    }
+                };
+
+                const fetchDailyBriefing = async () => {
+                    try {
+                        const res = await fetch('/api/daily-briefing');
+                        const data = await res.json();
+                        if (data.success) {
+                            const briefingContent = document.getElementById('daily-briefing-content');
+                            if (data.follow_ups.length > 0) {
+                                let html = '<ul class="space-y-3">';
+                                data.follow_ups.forEach(task => {
+                                    html += `<li class="flex items-start"><div class="bg-blue-100 text-primary rounded-full p-2 mr-3"><i class="fas fa-phone"></i></div><div><p class="font-medium">Follow up with ${task.name}</p><p class="text-sm text-gray-500">${task.status} lead - ${task.days_overdue} days overdue</p></div></li>`;
+                                });
+                                html += '</ul>';
+                                briefingContent.innerHTML = html;
+                            } else {
+                                briefingContent.innerHTML = '<p>You are all caught up on your follow-ups. Great job!</p>';
+                            }
+                        }
+                    } catch (e) {
+                        console.error("Failed to fetch daily briefing:", e);
+                    }
+                };
+
+                onMounted(() => {
+                    addMessage('Welcome to your Digital Twin. How can I assist?', 'aura');
+                    fetchDailyBriefing();
+                    const dropZone = document.getElementById('drop-zone');
+                    if(dropZone){
+                        dropZone.onclick = () => document.getElementById('file-input').click();
+                        dropZone.ondragover = e => e.preventDefault();
+                        dropZone.ondrop = e => {
+                            e.preventDefault();
+                            filesToUpload.value = Array.from(e.dataTransfer.files);
+                            updateFileListUI();
+                        };
+                    }
+                });
+
+                return {
+                    activeTab,
+                    filesToUpload,
+                    userInput,
+                    messages,
+                    isLoading,
+                    showTab,
+                    getTabClass,
+                    handleFileSelect,
+                    uploadFiles,
+                    sendMessage
+                };
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
