@@ -814,8 +814,7 @@
                 };
 
                 const loadProperties = async () => {
-                    if (properties.value.loaded) return;
-                    
+                    properties.value.loading = true;
                     try {
                         const response = await fetch('/api/properties');
                         if (response.ok) {
@@ -825,6 +824,10 @@
                                 loaded: true, 
                                 data: data.properties || [] 
                             };
+                            console.log('Properties loaded:', data.properties?.length || 0);
+                        } else {
+                            console.error('Failed to load properties:', response.status);
+                            properties.value = { loading: false, loaded: true, data: [] };
                         }
                     } catch (error) {
                         console.error('Error loading properties:', error);
@@ -833,8 +836,7 @@
                 };
 
                 const loadContacts = async () => {
-                    if (contacts.value.loaded) return;
-                    
+                    contacts.value.loading = true;
                     try {
                         const response = await fetch('/api/contacts');
                         if (response.ok) {
@@ -844,6 +846,10 @@
                                 loaded: true, 
                                 data: data.contacts || [] 
                             };
+                            console.log('Contacts loaded:', data.contacts?.length || 0);
+                        } else {
+                            console.error('Failed to load contacts:', response.status);
+                            contacts.value = { loading: false, loaded: true, data: [] };
                         }
                     } catch (error) {
                         console.error('Error loading contacts:', error);
@@ -852,8 +858,7 @@
                 };
 
                 const loadAnalytics = async () => {
-                    if (leadScores.value.loaded) return;
-                    
+                    leadScores.value.loading = true;
                     try {
                         const response = await fetch('/api/analytics/leads');
                         if (response.ok) {
@@ -863,6 +868,10 @@
                                 loaded: true, 
                                 data: data.lead_scores || [] 
                             };
+                            console.log('Analytics loaded:', data.lead_scores?.length || 0);
+                        } else {
+                            console.error('Failed to load analytics:', response.status);
+                            leadScores.value = { loading: false, loaded: true, data: [] };
                         }
                     } catch (error) {
                         console.error('Error loading analytics:', error);
@@ -950,13 +959,15 @@
                     addMessage('Welcome to your Digital Twin Command Center! I\'m AURA, your AI real estate assistant. How can I help you today?', 'aura');
                     
                     // Load initial dashboard data
-                    loadDashboardData();
-                    loadKnowledgeStats();
+                    await loadDashboardData();
+                    await loadKnowledgeStats();
                     
                     // Pre-load properties and contacts for instant access
-                    loadProperties();
-                    loadContacts();
-                    loadAnalytics();
+                    await loadProperties();
+                    await loadContacts();
+                    await loadAnalytics();
+                    
+                    console.log('All data loaded successfully');
                 });
 
                 return {

@@ -656,9 +656,9 @@ def get_dashboard_stats():
         cursor.execute("SELECT COUNT(*) FROM Deals WHERE status = 'Active'")
         active_deals = cursor.fetchone()[0]
         
-        # Revenue last 30 days
+        # Revenue last 30 days (using deal_value as fallback)
         thirty_days_ago = (datetime.now() - timedelta(days=30)).isoformat()
-        cursor.execute("SELECT COALESCE(SUM(commission_amount), 0) FROM Deals WHERE status = 'Closed' AND closed_date >= ?", (thirty_days_ago,))
+        cursor.execute("SELECT COALESCE(SUM(deal_value * 0.03), 0) FROM Deals WHERE status = 'Closed' AND closed_date >= ?", (thirty_days_ago,))
         revenue_30_days = cursor.fetchone()[0]
         
         # Pipeline value (active deals)
