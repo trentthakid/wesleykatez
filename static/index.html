@@ -4,8 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Digital Twin - AI-Powered Real Estate Command Center</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/static/style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script>
@@ -32,7 +36,7 @@
         .dashboard-card:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="bg-slate-100 text-slate-800">
     <div id="app">
         <!-- Header -->
         <header class="bg-primary text-white shadow-lg">
@@ -222,10 +226,20 @@
                     </div>
                     
                     <div class="bg-white rounded-xl shadow-md overflow-hidden">
-                        <div id="chat-container" class="h-[600px] overflow-y-auto p-4 bg-gray-50">
+                        <div id="chat-container" class="h-[600px] overflow-y-auto p-6 space-y-6">
+                            <!-- Welcome Message -->
+                            <div class="chat-message welcome-message">
+                                <div class="flex items-start">
+                                    <i class="fas fa-robot text-secondary text-xl mr-4 mt-1"></i>
+                                    <div>
+                                        <h3 class="font-bold text-primary">Welcome to AURA</h3>
+                                        <p class="text-sm text-slate-600">I'm your AI assistant manager, specializing in the Palm Jumeirah market. How can I help you save time today?</p>
+                                    </div>
+                                </div>
+                            </div>
                             <!-- Chat messages will be dynamically added here -->
                         </div>
-                        <div class="border-t p-4 bg-white">
+                        <div class="border-t p-4 bg-slate-50">
                             <div class="flex space-x-3">
                                 <div class="flex-1 relative">
                                     <input 
@@ -680,55 +694,86 @@
                 };
 
                 // Chat functionality
-                const addMessage = async (content, sender) => {
+                const addMessage = async (content, sender, isThinking = false) => {
                     const chatContainer = document.getElementById('chat-container');
                     if (!chatContainer) return;
-                    
-                    const message = document.createElement('div');
-                    message.className = `chat-message mb-4 flex ${sender === 'user' ? 'justify-end' : 'justify-start'}`;
-                    
+
+                    const messageId = `msg-${Date.now()}`;
+                    const messageWrapper = document.createElement('div');
+                    messageWrapper.className = 'chat-message';
+                    messageWrapper.id = messageId;
+
                     if (sender === 'user') {
-                        message.innerHTML = `
-                            <div class="bg-primary text-white rounded-lg p-3 max-w-[80%] shadow-md">
-                                <p class="text-sm">${content}</p>
+                        messageWrapper.innerHTML = `
+                            <div class="flex justify-end">
+                                <div class="bg-primary text-white rounded-xl p-3 max-w-[80%] shadow">
+                                    <p class="text-sm">${content}</p>
+                                </div>
                             </div>
                         `;
-                    } else {
-                        message.innerHTML = `
-                            <div class="bg-gray-200 rounded-lg p-3 max-w-[80%] shadow-md">
-                                <div class="flex items-center mb-1">
-                                    <i class="fas fa-robot text-primary mr-2"></i>
-                                    <span class="text-xs font-medium text-gray-600">AURA</span>
+                    } else { // AURA's message
+                        let auraContent = isThinking ? `
+                            <div class="thinking-indicator">
+                                <span></span><span></span><span></span>
+                            </div>
+                        ` : `<p class="text-sm text-slate-700 whitespace-pre-wrap">${content}</p>`;
+
+                        messageWrapper.innerHTML = `
+                            <div class="flex justify-start">
+                                <div class="bg-slate-200 rounded-xl p-3 max-w-[80%] shadow">
+                                    <div class="flex items-center mb-2">
+                                        <i class="fas fa-robot text-primary mr-2"></i>
+                                        <span class="text-xs font-bold text-primary">AURA</span>
+                                    </div>
+                                    ${auraContent}
                                 </div>
-                                <p class="text-sm whitespace-pre-wrap">${content}</p>
                             </div>
                         `;
                     }
-                    
-                    chatContainer.appendChild(message);
+
+                    chatContainer.appendChild(messageWrapper);
                     await nextTick();
                     chatContainer.scrollTop = chatContainer.scrollHeight;
+                    return messageId;
                 };
 
                 const sendMessage = async () => {
                     const messageText = userInput.value.trim();
                     if (!messageText || isLoading.value) return;
-                    
+
                     addMessage(messageText, 'user');
                     userInput.value = '';
                     isLoading.value = true;
-                    
+
+                    const thinkingMessageId = await addMessage('', 'aura', true);
+
                     try {
                         const response = await fetch('/api/chat', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ message: messageText })
                         });
-                        
+
                         const data = await response.json();
-                        addMessage(data.message || data.error || 'No response received', 'aura');
+                        const responseText = data.message || data.error || 'No response received';
+                        
+                        // Update the "thinking" message with the actual response
+                        const thinkingMessage = document.getElementById(thinkingMessageId);
+                        if (thinkingMessage) {
+                            thinkingMessage.querySelector('.bg-slate-200').innerHTML = `
+                                <div class="flex items-center mb-2">
+                                    <i class="fas fa-robot text-primary mr-2"></i>
+                                    <span class="text-xs font-bold text-primary">AURA</span>
+                                </div>
+                                <p class="text-sm text-slate-700 whitespace-pre-wrap">${responseText}</p>
+                            `;
+                        }
+
                     } catch (error) {
-                        addMessage('I\'m experiencing connection issues. Please try again.', 'aura');
+                        const thinkingMessage = document.getElementById(thinkingMessageId);
+                        if (thinkingMessage) {
+                            thinkingMessage.querySelector('.bg-slate-200 p').textContent = 'I\'m experiencing connection issues. Please try again.';
+                        }
                     } finally {
                         isLoading.value = false;
                     }
@@ -975,10 +1020,6 @@
 
                 // Lifecycle
                 onMounted(async () => {
-                    // Initialize chat with welcome message
-                    await nextTick();
-                    addMessage('Welcome to your Digital Twin Command Center! I\'m AURA, your AI real estate assistant. How can I help you today?', 'aura');
-                    
                     // Load initial dashboard data
                     await loadDashboardData();
                     await loadKnowledgeStats();
