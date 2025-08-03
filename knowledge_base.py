@@ -156,7 +156,12 @@ def add_to_knowledge_base(file_path: str, filename: str) -> bool:
         file_extension = filename.lower().split('.')[-1]
 
         if file_extension == 'csv':
-            return add_contacts_from_csv(file_path, filename)
+            # Try to process as a contacts CSV first
+            if add_contacts_from_csv(file_path, filename):
+                return True
+            # If not a contacts CSV, try to process as an owners CSV
+            if add_owners_from_csv(file_path, filename):
+                return True
 
         # Extract content based on file type
         content = extract_content_from_file(file_path, filename)
@@ -476,6 +481,63 @@ def update_knowledge_item_tags(item_id: int, tags: List[str]) -> bool:
         
     except Exception as e:
         logging.error(f"Error updating knowledge item tags: {str(e)}")
+        return False
+
+def add_owners_from_csv(file_path: str, filename: str) -> bool:
+    """
+    Process a CSV file of property owners and link them to contacts and properties.
+    """
+    try:
+        with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+            reader = csv.DictReader(f)
+            
+            conn = get_db_connection()
+            cursor = conn.cursor()
+            
+            for row in reader:
+                # Extract data from the row
+                owner_name = row.get('owner_name')
+                phone = row.get('phone')
+                building = row.get('building')
+                unit = row.get('unit')
+
+                if not all([owner_name, phone, building, unit]):
+                    continue
+
+                # Find or create the contact
+                cursor.execute("SELECT id FROM Contacts WHERE name = ? AND phone = ?", (owner_name, phone))
+                contact_result = cursor.fetchone()
+                
+                if contact_result:
+                    contact_id = contact_result[0]
+                else:
+                    cursor.execute("""
+                        INSERT INTO Contacts (name, phone, source, created_date)
+                        VALUES (?, ?, ?, ?)
+                    """, (owner_name, phone, filename, datetime.now().isoformat()))
+                    contact_id = cursor.lastrowid
+
+                # Find the property
+                cursor.execute("SELECT id FROM Properties WHERE building = ? AND unit = ?", (building, unit))
+                property_result = cursor.fetchone()
+                
+                if property_result:
+                    property_id = property_result[0]
+                    
+                    # Link the contact to the property as an owner
+                    cursor.execute("""
+                        INSERT OR IGNORE INTO ContactProperties (contact_id, property_id, relationship_type)
+                        VALUES (?, ?, 'Owner')
+                    """, (contact_id, property_id))
+
+            conn.commit()
+            conn.close()
+            
+            logging.info(f"Successfully processed owners from {filename}")
+            return True
+            
+    except Exception as e:
+        logging.error(f"Error adding owners from {filename}: {str(e)}")
         return False
 
 def add_contacts_from_csv(file_path: str, filename: str) -> bool:

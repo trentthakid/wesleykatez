@@ -94,8 +94,20 @@ def chat():
 def route_command(user_input, conversation_history):
     """Two-tier cognitive engine: Tool-based routing + LLM escalation"""
     
+    # Tier 0: Handle simple conversational inputs to avoid unnecessary LLM calls
+    normalized_input = user_input.lower().strip()
+    simple_responses = {
+        "thanks": "You're welcome!",
+        "thank you": "You're welcome! Let me know if there's anything else I can help with.",
+        "ok": "Great!",
+        "okay": "Great!",
+        "cool": "Happy to help!"
+    }
+    if normalized_input in simple_responses:
+        return simple_responses[normalized_input]
+
     # Get intent from Gemini
-    intent_data = gemini_client.get_intent(conversation_history)
+    intent_data = gemini_client.get_intent(user_input)
     intent = intent_data.get("intent")
     entities = intent_data.get("entities", {})
     
@@ -113,7 +125,7 @@ def route_command(user_input, conversation_history):
     elif intent == "find_buyers":
         return find_buyers_for_property(user_input)
     elif intent == "search_properties":
-        return search_properties(user_input)
+        return search_properties(user_input, entities)
     elif intent == "get_market_analysis":
         return get_market_analysis(user_input)
     elif intent == "get_performance_summary":
@@ -125,21 +137,49 @@ def route_command(user_input, conversation_history):
         return llm_tool(user_input, conversation_history)
 
 def find_owner(query):
-    """Find the owner of a specific property"""
+    """Find the owner of a specific property using flexible search"""
     try:
-        # Extract property information from query
+        # First, try to find an exact match
         properties = find_properties_in_text(query)
         
         if not properties:
-            return "I couldn't identify a specific property in your query. Please provide the building name and unit number."
-        
+            # If no exact match, perform a broader search
+            search_terms = query.lower().replace('who owns', '').strip().split()
+            
+            if not search_terms:
+                return "Please specify a property to find the owner for."
+
+            conn = get_db_connection()
+            cursor = conn.cursor()
+
+            # Build a dynamic query for a broader search
+            conditions = " AND ".join(["(p.building LIKE ? OR p.unit LIKE ?)" for _ in search_terms])
+            params = [f"%{term}%" for term in search_terms for _ in (1, 2)]
+
+            cursor.execute(f"""
+                SELECT c.name, c.email, c.phone, p.building, p.unit
+                FROM ContactProperties cp
+                JOIN Contacts c ON cp.contact_id = c.id
+                JOIN Properties p ON cp.property_id = p.id
+                WHERE cp.relationship_type = 'Owner' AND {conditions}
+            """, params)
+
+            owner_data = cursor.fetchone()
+            conn.close()
+
+            if owner_data:
+                return f"Owner of {owner_data[3]} Unit {owner_data[4]}: {owner_data[0]} ({owner_data[1]}, {owner_data[2]})"
+            else:
+                return f"No owner found matching your query: '{' '.join(search_terms)}'"
+
+        # If an exact match was found, proceed as before
         conn = get_db_connection()
         cursor = conn.cursor()
         
         results = []
         for prop in properties:
             cursor.execute("""
-                SELECT c.name, c.email, c.phone, cp.relationship_type, p.building, p.unit
+                SELECT c.name, c.email, c.phone, p.building, p.unit
                 FROM ContactProperties cp
                 JOIN Contacts c ON cp.contact_id = c.id
                 JOIN Properties p ON cp.property_id = p.id
@@ -148,7 +188,7 @@ def find_owner(query):
             
             owner_data = cursor.fetchone()
             if owner_data:
-                results.append(f"Owner of {owner_data[4]} Unit {owner_data[5]}: {owner_data[0]} ({owner_data[1]}, {owner_data[2]})")
+                results.append(f"Owner of {owner_data[3]} Unit {owner_data[4]}: {owner_data[0]} ({owner_data[1]}, {owner_data[2]})")
             else:
                 results.append(f"No owner found for {prop['building']} Unit {prop['unit']}")
         
@@ -279,25 +319,49 @@ def find_buyers_for_property(query):
         logging.error(f"Error finding buyers: {str(e)}")
         return "Sorry, I couldn't find potential buyers."
 
-def search_properties(query):
-    """Search for properties based on query"""
+def search_properties(query, entities):
+    """Search for properties based on structured entities or a general query"""
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
         
-        # Simple search in building and area fields
-        search_term = query.replace('find property', '').replace('search property', '').strip()
+        conditions = []
+        params = []
         
-        cursor.execute("""
-            SELECT building, unit, area, property_type, bedrooms, bathrooms, price
-            FROM Properties 
-            WHERE building LIKE ? OR area LIKE ? OR property_type LIKE ?
-            LIMIT 5
-        """, (f"%{search_term}%", f"%{search_term}%", f"%{search_term}%"))
-        
+        # Build a query from entities if they exist
+        if entities.get("bedrooms"):
+            conditions.append("bedrooms = ?")
+            params.append(entities["bedrooms"])
+        if entities.get("community"):
+            conditions.append("(building LIKE ? OR area LIKE ?)")
+            params.extend([f"%{entities['community']}%", f"%{entities['community']}%"])
+        if entities.get("property_type"):
+            conditions.append("property_type LIKE ?")
+            params.append(f"%{entities['property_type']}%")
+
+        if conditions:
+            sql_query = f"""
+                SELECT building, unit, area, property_type, bedrooms, bathrooms, price
+                FROM Properties 
+                WHERE {' AND '.join(conditions)}
+                LIMIT 5
+            """
+        else:
+            # Fallback to simple search if no entities are found
+            search_term = query.replace('find property', '').replace('search property', '').strip()
+            sql_query = """
+                SELECT building, unit, area, property_type, bedrooms, bathrooms, price
+                FROM Properties 
+                WHERE building LIKE ? OR area LIKE ? OR property_type LIKE ?
+                LIMIT 5
+            """
+            params = [f"%{search_term}%", f"%{search_term}%", f"%{search_term}%"]
+
+        cursor.execute(sql_query, params)
         properties = cursor.fetchall()
         conn.close()
         
+        search_term = "your criteria" if entities else query
         if not properties:
             return f"No properties found matching '{search_term}'"
         

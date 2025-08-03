@@ -416,18 +416,18 @@ Only include information that is clearly stated. Use null for missing informatio
             logging.error(f"Error extracting client preferences: {str(e)}")
             return {}
     
-    def get_intent(self, conversation_history: List[Dict[str, str]]) -> Dict[str, Any]:
+    def get_intent(self, user_input: str) -> Dict[str, Any]:
         """
-        Determine the user's intent from the conversation history.
+        Determine the user's intent from a single user message.
         """
         prompt = f"""
 You are AURA, an AI assistant manager for a real estate agent. Your primary job is to understand the user's command, identify their intent, and extract key information (entities).
 
-**Conversation History:**
-{json.dumps(conversation_history, indent=2)}
+**User Command:**
+"{user_input}"
 
 **Task:**
-Analyze the last user message in the conversation history and determine the intent.
+Analyze the user's command and determine the intent.
 Return a single JSON object with the `intent` and any `entities`.
 
 **Possible Intents & Examples:**
@@ -452,13 +452,15 @@ Return a single JSON object with the `intent` and any `entities`.
   }}
 }}
 
-Now, based on the conversation history provided, what is the intent of the last user message?
+Now, based on the user command provided, what is the intent?
 """
         
         try:
             response = self.model.generate_content(
                 prompt,
-                generation_config=genai.types.GenerationConfig()
+                generation_config=genai.types.GenerationConfig(
+                    response_mime_type="application/json"
+                )
             )
             
             if response.text:
